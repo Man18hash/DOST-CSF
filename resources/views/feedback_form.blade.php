@@ -1,70 +1,46 @@
 @extends('layouts.app')
 
-@section('title', 'Feedback Form')
+@section('title', 'Customer Satisfaction Feedback')
 
 @section('content')
     <div class="form-container">
-        <form method="POST" action="{{ route('feedback.store') }}">
-            @csrf
-
-            <table id="formTable">
-                <thead>
-                    <tr>
-                        <th>Field Name</th>
-                        <th>Input Type</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="formBody">
-                    <tr>
-                        <td><input type="text" name="field_name[]" placeholder="Enter field name"></td>
-                        <td>
-                            <select name="field_type[]">
-                                <option value="text">Text</option>
-                                <option value="email">Email</option>
-                                <option value="number">Number</option>
-                                <option value="textarea">Textarea</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-delete" onclick="deleteRow(this)">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <button type="button" class="btn btn-add" onclick="addRow()">+ Add Field</button>
-            <br><br>
-            <button type="submit" class="btn btn-submit">Submit</button>
-        </form>
+        <h1>CUSTOMER SATISFACTION FEEDBACK</h1>
     </div>
+@endsection
 
-    <script>
-        function addRow() {
-            let table = document.getElementById("formBody");
-            let newRow = document.createElement("tr");
+@section('styles')
+<style>
+    /* Center the container and apply styling */
+    .form-container {
+        background: rgba(255, 255, 255, 0.8); /* Glass effect */
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        max-width: 700px;
+        width: 90%;
+        margin: auto;
+        text-align: center;
+        backdrop-filter: blur(8px); /* Glassmorphism effect */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-            newRow.innerHTML = `
-                <td><input type="text" name="field_name[]" placeholder="Enter field name"></td>
-                <td>
-                    <select name="field_type[]">
-                        <option value="text">Text</option>
-                        <option value="email">Email</option>
-                        <option value="number">Number</option>
-                        <option value="textarea">Textarea</option>
-                    </select>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-delete" onclick="deleteRow(this)">Delete</button>
-                </td>
-            `;
+    /* Improve text appearance */
+    h1 {
+        font-size: 40px;
+        font-weight: bold;
+        color: #333;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
 
-            table.appendChild(newRow);
-        }
-
-        function deleteRow(button) {
-            let row = button.parentElement.parentElement;
-            row.remove();
-        }
-    </script>
+    /* Background overlay with gradient for better contrast */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+    }
+</style>
 @endsection
