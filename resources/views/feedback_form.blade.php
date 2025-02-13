@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Customer Satisfaction Feedback')
+@section('title', 'DOST02 CSF Form')
 
 @section('content')
     <div class="form-container">

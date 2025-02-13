@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Customer Satisfaction Feedback')</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+
     <style>
         * {
             margin: 0;
@@ -56,7 +58,7 @@
         .header-text {
             display: flex;
             flex-direction: column;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             color: #333;
         }
