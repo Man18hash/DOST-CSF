@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Customer Satisfaction Feedback')</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
@@ -32,9 +33,7 @@
 
         /* Header styling */
         .header {
-            position: fixed;
-            top: 7px;
-            left: 0;
+            position: relative; /* Allow header to move with the page */
             width: 100%;
             background: rgba(255, 255, 255, 0.9);
             padding: 15px 30px;
@@ -42,6 +41,8 @@
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Ensures it stays above other content */
+            margin-top: 7px;
         }
 
         /* Logo & text container */
@@ -73,83 +74,12 @@
         /* Main content */
         .container {
             position: relative;
-            top: 100px; /* Push content below header */
+            margin-top: 20px; /* Adjust space below the header */
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: calc(100vh - 120px);
             padding: 20px;
-        }
-
-        /* Form container */
-        .form-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 700px;
-            width: 90%;
-            text-align: center;
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-        }
-
-        th, td {
-            border: 1px solid #ccc;
-            padding: 12px;
-            text-align: center;
-        }
-
-        th {
-            background: #007bff;
-            color: white;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        .btn-add {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-delete {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-submit {
-            background: #007bff;
-            color: white;
-            width: 100%;
-            font-size: 16px;
-        }
-
-        .btn:hover {
-            opacity: 0.8;
         }
 
         /* Footer */
@@ -165,8 +95,6 @@
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
     </style>
-
-    @vite(['resources/css/style.css']) <!-- Load CSS via Vite -->
 
 </head>
 <body>
