@@ -9,12 +9,10 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
-            $table->string('field_name');
-            $table->string('field_type');
             $table->timestamps();
         });
     }

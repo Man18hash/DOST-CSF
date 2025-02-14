@@ -1,0 +1,75 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Background Styling */
+body {
+    background: url('/images/feedback-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Overlay to Improve Readability */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Centered Form Container */
+.form-container {
+    background: rgba(78, 85, 88, 0.85); /* Glass effect */
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    top: -190px; /* Moves it higher */
+}
+
+/* Title Styling */
+.title-text {
+    font-size: 55px;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1.2s ease-in-out;
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 0;
+    font-size: 14px;
+    color: #333;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

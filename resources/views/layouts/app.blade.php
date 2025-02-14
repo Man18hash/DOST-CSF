@@ -166,7 +166,8 @@
         }
     </style>
 
-    @yield('styles') <!-- Additional page-specific styles -->
+    @vite(['resources/css/style.css']) <!-- Load CSS via Vite -->
+
 </head>
 <body>
 
