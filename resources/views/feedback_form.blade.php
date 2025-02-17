@@ -146,6 +146,7 @@
                         <td colspan="2" style="text-align: left; font-weight: bold; padding: 15px; background: rgba(38, 58, 156, 0.1);">
                         </td>
                     </tr>
+
                     <tr>
                         <td><strong>DOST 02 Office/Unit Provider:</strong></td>
                         <td><input type="text" name="unit provider" required></td>
@@ -158,6 +159,11 @@
                         <td><strong>Name of DOST 02 Employee:</strong></td>
                         <td><input type="text" name="DOST Employee" required></td>
                     </tr>
+
+                    <tr>
+                        <td></td>
+                    </tr>
+
                     <tr>
                         <td colspan="2" style="text-align: left; font-weight: bold; padding: 15px; background: rgba(38, 58, 156, 0.1);">
                             INSTRUCTIONS:<span style="font-weight:normal"> For SQD 0-8, please put a</span>
@@ -268,7 +274,7 @@
                             <td><input type="radio" name="SQD8" value="N/A"></td>
                         </tr>
                     </table>
-                </br>
+                    </br>
                     <!-- Suggestions/Comments Section -->
                     <tr>
                         <td colspan="7" style="text-align: left; padding: 15px;"><strong>
@@ -277,13 +283,13 @@
                     </tr>
                     <tr>
                         <td colspan="7">
-                            <textarea name="suggestions" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+                            <textarea name="suggestions" rows="4" style="width: 100%; border: 1px solid #ccc; border-radius: 5px; margin-top: 10px;"></textarea>
                         </td>
                     </tr>
 
                     <!-- Likert Scale Rating -->
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 15px;"><strong>
+                        <td colspan="7" style="text-align: center; padding: 20px;"><strong>
                             Please put a check mark (✔), on a scale of 1 to 10,
                             with 10 being the highest and 1 being the lowest,
                             how likely you are to recommend our programs and services.</strong>
@@ -291,8 +297,8 @@
                     </tr>
 
                     <!-- Rating Scale Row -->
-                    <div>
-                        <tr style="text-align: center; font-weight: bold; font-size: 18px;">
+                    <div style="margin-top: 10px;">
+                        <tr style="text-align: center; font-weight: bold; font-size: 18px; ">
                             <td colspan="7">
                                 <label style="color: red; padding: 10px;">
                                     <input type="radio" name="recommendation" value="1">
