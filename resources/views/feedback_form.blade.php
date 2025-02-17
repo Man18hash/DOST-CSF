@@ -91,34 +91,57 @@
                                 detailing a government agency's services, requirements, fees, and processing times.</span>
                         </td>
                     </tr>
+
+                    <!-- CC1 Selection -->
                     <tr>
                         <td><strong>CC1: Which of the following best describes your awareness of a CC?</strong></td>
                         <td class="checkbox-group">
-                            <label><input type="checkbox" name="CC1" value="I know what a CC is and I saw this office's CC."> I know what a CC is and I saw this office's CC.</label>
-                            <label><input type="checkbox" name="CC1" value="I know what a CC is but I did not see the office's CC."> I know what a CC is but I did not see the office's CC.</label>
-                            <label><input type="checkbox" name="CC1" value="I learned of the CC only when I saw this office's CC."> I learned of the CC only when I saw this office's CC.</label>
-                            <label><input type="checkbox" name="CC1" value="I do not know what a CC is and I did not see one in this office."> I do not know what a CC is and I did not see one in this office.</label>
+                            <label><input type="radio" name="CC1" value="I know what a CC is and I saw this office's CC." onclick="toggleCC(false)"> I know what a CC is and I saw this office's CC.</label>
+                            <label><input type="radio" name="CC1" value="I know what a CC is but I did not see the office's CC." onclick="toggleCC(false)"> I know what a CC is but I did not see the office's CC.</label>
+                            <label><input type="radio" name="CC1" value="I learned of the CC only when I saw this office's CC." onclick="toggleCC(false)"> I learned of the CC only when I saw this office's CC.</label>
+                            <label>
+                                <input type="radio" name="CC1" id="cc1-no-knowledge" value="I do not know what a CC is and I did not see one in this office." onclick="toggleCC(true)">
+                                I do not know what a CC is and I did not see one in this office.
+                            </label>
                         </td>
                     </tr>
-                    <tr>
+
+                    <!-- CC2 and CC3 (Proper Table Rows) -->
+                    <tr id="cc-extra-questions">
                         <td><strong>CC2: If aware of CC (answered 1-3 in CC1), would you say that the CC of this office was ...?</strong></td>
                         <td class="checkbox-group">
-                            <label><input type="checkbox" name="CC2" value="Easy to see"> Easy to see</label>
-                            <label><input type="checkbox" name="CC2" value="Somewhat easy to see"> Somewhat easy to see</label>
-                            <label><input type="checkbox" name="CC2" value="Difficult to see"> Difficult to see</label>
-                            <label><input type="checkbox" name="CC2" value="Not visible at all"> Not visible at all</label>
-                            <label><input type="checkbox" name="CC2" value="Not applicable"> Not applicable</label>
+                            <label><input type="radio" name="CC2" value="Easy to see"> Easy to see</label>
+                            <label><input type="radio" name="CC2" value="Somewhat easy to see"> Somewhat easy to see</label>
+                            <label><input type="radio" name="CC2" value="Difficult to see"> Difficult to see</label>
+                            <label><input type="radio" name="CC2" value="Not visible at all"> Not visible at all</label>
+                            <label><input type="radio" name="CC2" value="Not applicable"> Not applicable</label>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="cc-extra-questions-2">
                         <td><strong>CC3: If aware of CC (answered 1-3 in CC1), how much did the CC help you in your transaction?</strong></td>
                         <td class="checkbox-group">
-                            <label><input type="checkbox" name="CC3" value="Helped very much"> Helped very much</label>
-                            <label><input type="checkbox" name="CC3" value="Somewhat helped"> Somewhat helped</label>
-                            <label><input type="checkbox" name="CC3" value="Did not helped"> Did not helped</label>
-                            <label><input type="checkbox" name="CC3" value="Not applicable"> Not applicable</label>
+                            <label><input type="radio" name="CC3" value="Helped very much"> Helped very much</label>
+                            <label><input type="radio" name="CC3" value="Somewhat helped"> Somewhat helped</label>
+                            <label><input type="radio" name="CC3" value="Did not help"> Did not help</label>
+                            <label><input type="radio" name="CC3" value="Not applicable"> Not applicable</label>
                         </td>
                     </tr>
+
+                    <script>
+                        function toggleCC(hide) {
+                            var ccExtra1 = document.getElementById("cc-extra-questions");
+                            var ccExtra2 = document.getElementById("cc-extra-questions-2");
+
+                            if (hide) {
+                                ccExtra1.style.display = "none";
+                                ccExtra2.style.display = "none";
+                            } else {
+                                ccExtra1.style.display = "table-row";
+                                ccExtra2.style.display = "table-row";
+                            }
+                        }
+                    </script>
+
                     <tr>
                         <td colspan="2" style="text-align: left; font-weight: bold; padding: 15px; background: rgba(38, 58, 156, 0.1);">
                         </td>
@@ -314,7 +337,6 @@
                             </td>
                         </tr>
                     </div>
-
                 </table>
                 <button type="submit" class="btn-submit">Submit</button>
             </form>
