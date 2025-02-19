@@ -3,8 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\AdminDashboardController;
 
-Route::get('/', [FeedbackController::class, 'index'])->name('home'); // Home page is the feedback form
+Route::get('/', [FeedbackController::class, 'index'])->name('home');
 Route::post('/feedback-store', [FeedbackController::class, 'store'])->name('feedback.store');
 
 Route::prefix('admin')->group(function () {
@@ -12,7 +13,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminLoginController::class, 'login']);
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/dashboard', [AdminLoginController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
         Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
     });
 });

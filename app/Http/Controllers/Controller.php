@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-abstract class Controller
+use Illuminate\Routing\Controller as BaseController;
+
+class Controller extends BaseController
 {
-    //
+    // ✅ If this file does not exist or is missing BaseController, middleware() will not work
 }

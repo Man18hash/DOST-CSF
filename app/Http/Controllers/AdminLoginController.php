@@ -4,51 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AdminLogin;
 
 class AdminLoginController extends Controller
 {
-    /**
-     * Show the admin login form.
-     */
     public function showLoginForm()
     {
-        return view('admin.login'); // Make sure the login view exists in resources/views/admin/login.blade.php
+        return view('admin.login');
     }
 
-    /**
-     * Handle admin login.
-     */
     public function login(Request $request)
     {
-        // Validate input fields
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        // Attempt login with 'admin' guard
-        if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
-            return redirect()->route('admin.dashboard');
+        $credentials = ['email' => $request->email, 'password' => $request->password];
+
+        if (Auth::guard('admin')->attempt($credentials)) {
+            session()->regenerate(); // ✅ Ensure session is refreshed
+            return redirect()->intended(route('admin.dashboard')); // ✅ Redirect properly
         }
 
-        // If login fails, return with an error
-        return back()->withErrors(['email' => 'Invalid credentials.']);
+        return back()->withErrors(['email' => 'Invalid credentials.'])->withInput($request->only('email'));
     }
 
-    /**
-     * Handle admin logout.
-     */
+
     public function logout()
     {
         Auth::guard('admin')->logout();
         return redirect()->route('admin.login');
-    }
-
-    /**
-     * Show the admin dashboard (protected route).
-     */
-    public function dashboard()
-    {
-        return view('admin.dashboard'); // Make sure dashboard.blade.php exists
     }
 }
