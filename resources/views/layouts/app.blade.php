@@ -8,6 +8,8 @@
 
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
     <div class="overlay"></div>

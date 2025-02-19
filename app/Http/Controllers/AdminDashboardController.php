@@ -15,14 +15,18 @@ class AdminDashboardController extends Controller
 
     public function dashboard()
     {
-        // dd(Auth::guard('admin')->user()); // Check if admin session is persisting
-
         $totalRespondents = Feedback::count();
-        $maleRespondents = Feedback::where('sex', '=', 'Male')->count();
-        $femaleRespondents = Feedback::where('sex', '=', 'Female')->count();
-        $averageAge = Feedback::average('age');
+        $maleRespondents = Feedback::where('sex', 'Male')->count();
+        $femaleRespondents = Feedback::where('sex', 'Female')->count();
 
-        return view('admin.dashboard', compact('totalRespondents', 'maleRespondents', 'femaleRespondents', 'averageAge'));
+        // Prevent division by zero
+        $malePercentage = ($totalRespondents > 0) ? round(($maleRespondents / $totalRespondents) * 100, 2) : 0;
+        $femalePercentage = ($totalRespondents > 0) ? round(($femaleRespondents / $totalRespondents) * 100, 2) : 0;
+
+        return view('admin.dashboard', compact(
+            'totalRespondents', 'maleRespondents', 'femaleRespondents',
+            'malePercentage', 'femalePercentage'
+        ));
     }
 
 }

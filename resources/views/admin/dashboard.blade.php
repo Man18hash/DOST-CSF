@@ -12,10 +12,9 @@
         </div>
         <ul class="sidebar-menu">
             <li><a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a></li>
-            {{-- <li><a href="{{ route('admin.respondents') }}">Respondents</a></li> --}}
-            {{-- <li><a href="{{ route('admin.years') }}">Years</a></li>
-            <li><a href="{{ route('admin.manage-form') }}">Manage Form</a></li>
-            <li><a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li> --}}
+            <li><a href="">Respondents</a></li>
+            <li><a href="">Years</a></li>
+            <li><a href="">Manage Form</a></li>
         </ul>
         <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
             @csrf
@@ -30,17 +29,11 @@
                 <h3>Total Respondents</h3>
                 <p>{{ $totalRespondents }}</p>
             </div>
-            <div class="card">
-                <h3>Male Respondents</h3>
-                <p>{{ $maleRespondents }}</p>
-            </div>
-            <div class="card">
-                <h3>Female Respondents</h3>
-                <p>{{ $femaleRespondents }}</p>
-            </div>
-            <div class="card">
-                <h3>Average Age</h3>
-                <p>{{ $averageAge }}</p>
+
+            <!-- 📌 Replace Male/Female Respondents with a Pie Chart -->
+            <div class="card chart-card">
+                <h3>Gender Distribution</h3>
+                <canvas id="genderChart"></canvas>
             </div>
         </div>
     </div>
@@ -53,5 +46,30 @@
         let sidebar = document.getElementById("sidebar");
         sidebar.classList.toggle("hidden");
     }
+
+    // 📌 Chart.js Pie Chart for Gender Distribution
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('genderChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Male', 'Female'],
+                datasets: [{
+                    data: [{{ $malePercentage }}, {{ $femalePercentage }}],
+                    backgroundColor: ['#3498db', '#e74c3c'],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    });
 </script>
 @endsection
