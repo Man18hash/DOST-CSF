@@ -1,0 +1,362 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Admin Container */
+/* Fix Sidebar Layout */
+.admin-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden; /* Prevents content from overflowing */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #2c3e50, #34495e);
+    color: white;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    margin-top: 11px;
+}
+
+.sidebar-logo {
+    width: 40px;
+    height: 40px;
+}
+
+.sidebar-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sidebar-menu {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.sidebar-menu li {
+    margin: 10px 0;
+    width: 100%;
+}
+
+.sidebar-menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    display: block;
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.sidebar-menu a.active,
+.sidebar-menu a:hover {
+    background-color: #1abc9c;
+}
+
+/* Main Content */
+/* Adjust Main Content */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: white;
+    margin-left: 250px; /* Ensure main content does not overlap sidebar */
+    width: calc(100% - 250px);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center;
+    text-align: center; /* Ensure text aligns properly */
+    padding-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    position: relative;
+}
+
+.dashboard-header h1 {
+    font-size: 24px;
+    color: #2c3e50;
+}
+
+.logout-btn {
+    position: absolute;
+    right: 20px;
+    top: 38%;
+    transform: translateY(-50%);
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Dashboard Cards */
+/* Dashboard Cards - Improve Visual Appeal */
+.dashboard-cards {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap; /* Ensure cards adjust properly on smaller screens */
+    justify-content: center; /* Center align the cards */
+}
+
+.card {
+    flex: 1;
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-width: 200px; /* Prevents cards from getting too small */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Make total respondents count bigger */
+.card p {
+    font-size: 40px;
+    font-weight: bold;
+    color: #1abc9c;
+    margin-top: 30px;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+/* Chart Fix - Make Pie Chart Smaller */
+.chart-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Chart Fix - Make Pie Chart Even Smaller */
+.card canvas {
+    max-width: 140px !important;
+    max-height: 140px !important;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+/* Improve Welcome Header */
+.welcome-text {
+    text-align: center;
+}
+
+/* Welcome Text Animation */
+@keyframes fadeInBounce {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(5px);
+    }
+    100% {
+        opacity: 1;  /* Ensure it stays visible */
+        transform: translateY(0);
+    }
+}
+
+.welcome-text h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+    opacity: 0;  /* Starts hidden */
+    animation: fadeInBounce 1.2s ease-in-out forwards;
+    display: inline-block; /* Prevents unwanted line breaks */
+}
+
+/* Hover Effect */
+.welcome-text:hover h1 {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+
+/* Make table container scrollable */
+.table-container {
+    width: 96.5%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 550px;
+}
+
+/* Ensure table stays within scrollable container */
+.respondents-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Prevents table from expanding too much */
+}
+
+
+.respondents-table th, .respondents-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.respondents-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+.respondents-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Client Classification Badge */
+.badge {
+    display: inline-block;
+    background-color: #2ecc71;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 2px;
+    font-size: 12px;
+}
+
+/* Preview Button */
+.btn-preview {
+    background-color: #f39c12;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.btn-preview:hover {
+    background-color: #e67e22;
+}
+
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* Reduce darkness */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px); /* Slight blur effect */
+}
+
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 90%; /* Increase width */
+    max-width: 900px; /* Make it bigger */
+    max-height: 85vh; /* Prevent it from being too large */
+    overflow-y: auto; /* Enable scrolling */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+
+
+/* Header styling */
+.form-container1 {
+    background: rgba(38, 58, 156, 0.7);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+/* Table Styling */
+.feedback-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table Layout */
+.feedback-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* Make input fields full width */
+.feedback-table input,
+.feedback-table textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Adjust Suggestions Textarea */
+.feedback-table textarea {
+    resize: none;
+    height: 80px;
+}
+
+/* Close button */
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: red;
+}
+

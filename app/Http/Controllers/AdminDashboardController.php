@@ -23,16 +23,42 @@ class AdminDashboardController extends Controller
         $malePercentage = ($totalRespondents > 0) ? round(($maleRespondents / $totalRespondents) * 100, 2) : 0;
         $femalePercentage = ($totalRespondents > 0) ? round(($femaleRespondents / $totalRespondents) * 100, 2) : 0;
 
+        // Age Distribution
+        $ageDistribution = [
+            '18-25' => Feedback::whereBetween('age', [18, 25])->count(),
+            '26-35' => Feedback::whereBetween('age', [26, 35])->count(),
+            '36-45' => Feedback::whereBetween('age', [36, 45])->count(),
+            '46-60' => Feedback::whereBetween('age', [46, 60])->count(),
+            '60+'   => Feedback::where('age', '>', 60)->count(),
+        ];
+
+        // Classification Data (Decode JSON column)
+        $classificationLabels = ['General Public', 'Business', 'Government', 'Student'];
+        $classificationData = [];
+
+        foreach ($classificationLabels as $label) {
+            $classificationData[$label] = Feedback::whereJsonContains('client_classification', $label)->count();
+        }
+
+        // Client Type Data
+        $internalCount = Feedback::where('client_type', 'Internal')->count();
+        $externalCount = Feedback::where('client_type', 'External')->count();
+
         return view('admin.dashboard', compact(
             'totalRespondents', 'maleRespondents', 'femaleRespondents',
-            'malePercentage', 'femalePercentage'
+            'malePercentage', 'femalePercentage',
+            'ageDistribution', 'classificationData',
+            'internalCount', 'externalCount'
         ));
     }
 
     public function respondents()
     {
-        return view('admin.respondents'); // Ensure you have this view
+        // Fetch all respondents from the Feedback model
+        $respondents = Feedback::all();
+
+        // Pass the data to the respondents view
+        return view('admin.respondents', compact('respondents'));
     }
 
 }
-
