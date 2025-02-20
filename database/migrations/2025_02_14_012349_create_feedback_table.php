@@ -25,16 +25,16 @@ return new class extends Migration
             $table->string('CC3')->nullable();
             $table->string('unit_provider');
             $table->string('assistance_availed');
-            $table->string('DOST_employee');
-            $table->integer('SQD0');
-            $table->integer('SQD1');
-            $table->integer('SQD2');
-            $table->integer('SQD3');
-            $table->integer('SQD4');
-            $table->integer('SQD5');
-            $table->integer('SQD6');
-            $table->integer('SQD7');
-            $table->integer('SQD8');
+            $table->string('DOST_employee')->nullable();
+            $table->string('SQD0');
+            $table->string('SQD1');
+            $table->string('SQD2');
+            $table->string('SQD3');
+            $table->string('SQD4');
+            $table->string('SQD5');
+            $table->string('SQD6');
+            $table->string('SQD7');
+            $table->string('SQD8');
             $table->text('suggestions')->nullable();
             $table->integer('recommendation'); // Rating scale from 1-10
             $table->timestamps();

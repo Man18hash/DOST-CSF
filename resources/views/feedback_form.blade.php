@@ -3,6 +3,17 @@
 @section('title', 'DOST02 CSF Form')
 
 @section('content')
+
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
     <div class="content-wrapper">
         <!-- Title Section -->
         <div class="form-container1">
@@ -15,7 +26,7 @@
 
         <!-- Form Section -->
         <div class="form-container2">
-            <form method="POST" action="{{ route('feedback.store') }}" class="feedback-form">
+            <form method="POST" action="{{ route('feedback.store') }}">
                 @csrf
                 <table class="feedback-table">
                     <tr>
@@ -149,15 +160,15 @@
 
                     <tr>
                         <td><strong>DOST 02 Office/Unit Provider:</strong></td>
-                        <td><input type="text" name="unit provider" required></td>
+                        <td><input type="text" name="unit_provider" required></td>
                     </tr>
                     <tr>
                         <td><strong>Service/Transaction/Assistance Availed:</strong></td>
-                        <td><input type="text" name="assistance availed" required></td>
+                        <td><input type="text" name="assistance_availed" required></td>
                     </tr>
                     <tr>
                         <td><strong>Name of DOST 02 Employee:</strong></td>
-                        <td><input type="text" name="DOST Employee" required></td>
+                        <td><input type="text" name="DOST_employee"></td>
                     </tr>
 
                     <tr>

@@ -29,5 +29,10 @@ class AdminDashboardController extends Controller
         ));
     }
 
+    public function respondents()
+    {
+        return view('admin.respondents'); // Ensure you have this view
+    }
+
 }
 

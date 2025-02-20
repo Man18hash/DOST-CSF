@@ -14,6 +14,7 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware('auth:admin')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/respondents', [AdminDashboardController::class, 'respondents'])->name('admin.respondents'); // ✅ Add this line
         Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
     });
 });

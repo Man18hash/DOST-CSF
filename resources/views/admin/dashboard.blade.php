@@ -12,7 +12,7 @@
         </div>
         <ul class="sidebar-menu">
             <li><a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a></li>
-            <li><a href="">Respondents</a></li>
+            <li><a href="{{ route('admin.respondents') }}">Respondents</a></li>
             <li><a href="">Years</a></li>
             <li><a href="">Manage Form</a></li>
         </ul>
