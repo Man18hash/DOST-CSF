@@ -18,10 +18,17 @@
             <span class="sidebar-title">DOST CSF</span>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a></li>
-            <li><a href="{{ route('admin.respondents') }}">Respondents</a></li>
-            <li><a href="#">Years</a></li>
-            <li><a href="#">Manage Form</a></li>
+            <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">Dashboard</a></li>
+            <li><a href="{{ route('admin.respondents') }}" class="{{ request()->is('admin/respondents') ? 'active' : '' }}">Respondents</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-btn" onclick="toggleDropdown()">Years ▼</a>
+                <div class="dropdown-container" id="yearDropdownContainer">
+                    <ul class="dropdown-content" id="yearDropdown">
+                        <li><a href="{{ route('admin.respondents') }}">All Years</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li><a href="{{ route('admin.manage_form') }}" class="{{ request()->is('admin/manage-form') ? 'active' : '' }}">Manage Form</a></li>
         </ul>
     </div>
 
@@ -65,70 +72,103 @@
 <!-- JavaScript -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Gender Pie Chart
-        new Chart(document.getElementById('genderChart').getContext('2d'), {
-            type: 'pie',
-            data: {
-                labels: ['Male', 'Female'],
-                datasets: [{
-                    data: [{{ $malePercentage }}, {{ $femalePercentage }}],
-                    backgroundColor: ['#3498db', '#e74c3c']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { position: 'bottom' } }
-            }
-        });
+        let malePercentage = @json($malePercentage);
+        let femalePercentage = @json($femalePercentage);
+        let ageDistribution = @json(array_values($ageDistribution));
+        let ageLabels = @json(array_keys($ageDistribution));
+        let classificationLabels = @json(array_keys($classificationData));
+        let classificationValues = @json(array_values($classificationData));
+        let internalCount = @json($internalCount);
+        let externalCount = @json($externalCount);
 
-        // Age Bar Chart
-        new Chart(document.getElementById('ageChart').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: {!! json_encode(array_keys($ageDistribution)) !!},
-                datasets: [{
-                    label: 'Age Distribution',
-                    data: {!! json_encode(array_values($ageDistribution)) !!},
-                    backgroundColor: '#1abc9c'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: { y: { beginAtZero: true } }
-            }
-        });
+        if (document.getElementById('genderChart') && malePercentage !== null && femalePercentage !== null) {
+            new Chart(document.getElementById('genderChart').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['Male', 'Female'],
+                    datasets: [{
+                        data: [malePercentage, femalePercentage],
+                        backgroundColor: ['#3498db', '#e74c3c']
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
 
-        // Classification Doughnut Chart
-        new Chart(document.getElementById('classificationChart').getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: {!! json_encode(array_keys($classificationData)) !!},
-                datasets: [{
-                    data: {!! json_encode(array_values($classificationData)) !!},
-                    backgroundColor: ['#f1c40f', '#e67e22', '#1abc9c', '#9b59b6']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { position: 'bottom' } }
-            }
-        });
+        console.log("Age Labels:", @json(array_keys($ageDistribution)));
+        console.log("Age Data:", @json(array_values($ageDistribution)));
 
-        // Client Type Pie Chart
-        new Chart(document.getElementById('clientTypeChart').getContext('2d'), {
-            type: 'pie',
-            data: {
-                labels: ['Internal', 'External'],
-                datasets: [{
-                    data: [{{ $internalCount }}, {{ $externalCount }}],
-                    backgroundColor: ['#2ecc71', '#e74c3c']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { position: 'bottom' } }
-            }
-        });
+        if (document.getElementById('ageChart') && ageDistribution.some(value => value > 0)) {
+            new Chart(document.getElementById('ageChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ageLabels,
+                    datasets: [{
+                        label: 'Age Distribution',
+                        data: ageDistribution,
+                        backgroundColor: '#1abc9c'
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+        } else {
+            console.warn("Age Distribution data is empty. Chart not rendered.");
+        }
+
+
+        if (document.getElementById('classificationChart')) {
+            new Chart(document.getElementById('classificationChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: classificationLabels,
+                    datasets: [{
+                        data: classificationValues,
+                        backgroundColor: ['#f1c40f', '#e67e22', '#1abc9c', '#9b59b6']
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        if (document.getElementById('clientTypeChart')) {
+            new Chart(document.getElementById('clientTypeChart').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['Internal', 'External'],
+                    datasets: [{
+                        data: [internalCount, externalCount],
+                        backgroundColor: ['#2ecc71', '#e74c3c']
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+    });
+</script>
+
+
+<script>
+    function toggleDropdown() {
+        document.querySelector('.dropdown').classList.toggle('active');
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let dropdownContent = document.getElementById("yearDropdown");
+
+        // Fetch years dynamically
+        fetch("{{ route('admin.years') }}")
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(year => {
+                    let listItem = document.createElement("li");
+                    let link = document.createElement("a");
+                    link.href = "{{ url('admin/respondents/filter') }}/" + year;
+                    link.textContent = year;
+                    listItem.appendChild(link);
+                    dropdownContent.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error("Error fetching years:", error));
     });
 </script>
 

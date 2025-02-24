@@ -14,10 +14,11 @@ body {
     overflow: hidden; /* Prevents content from overflowing */
 }
 
-/* Sidebar */
+/* Sidebar Scrollable */
 .sidebar {
     width: 250px;
     min-height: 100vh;
+    max-height: 100vh;
     background: linear-gradient(180deg, #2c3e50, #34495e);
     color: white;
     padding-top: 20px;
@@ -27,6 +28,7 @@ body {
     position: fixed;
     left: 0;
     top: 0;
+    overflow-y: auto; /* Allows scrolling if there are many items */
 }
 
 
@@ -186,14 +188,14 @@ body {
 @keyframes fadeInBounce {
     0% {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(0px);
     }
-    50% {
+    0% {
         opacity: 1;
-        transform: translateY(5px);
+        transform: translateY(0px);
     }
     100% {
-        opacity: 1;  /* Ensure it stays visible */
+        opacity: 1;
         transform: translateY(0);
     }
 }
@@ -222,7 +224,7 @@ body {
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    max-height: 550px;
+    max-height: 650px;
 }
 
 /* Ensure table stays within scrollable container */
@@ -298,7 +300,7 @@ body {
     padding: 20px;
     width: 90%; /* Increase width */
     max-width: 900px; /* Make it bigger */
-    max-height: 85vh; /* Prevent it from being too large */
+    max-height: 90vh; /* Prevent it from being too large */
     overflow-y: auto; /* Enable scrolling */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     position: relative;
@@ -360,3 +362,86 @@ body {
     color: red;
 }
 
+
+
+/* Dropdown Styling */
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-btn {
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+}
+
+/* Dropdown Container */
+.dropdown-container {
+    display: none;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 5px 0;
+    width: 90%;
+    position: relative;
+    max-height: 200px; /* Prevents it from becoming too large */
+    overflow-y: auto; /* Scrollable if too many years */
+}
+
+/* Dropdown List Items */
+.dropdown-content {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-content li {
+    padding: 5px 9px;
+}
+
+.dropdown-content li a {
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    transition: background 0.3s;
+}
+
+.dropdown-content li a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Show dropdown when active */
+.dropdown.active .dropdown-container {
+    display: block;
+}
+
+/* Sort By: */
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-container label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.filter-container select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
