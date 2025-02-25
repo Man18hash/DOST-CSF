@@ -156,6 +156,73 @@ body {
     font-size: 14px;
 }
 
+
+/* Unit Provider Container */
+/* Style the dropdown to look like a normal input */
+.feedback-table select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    appearance: none; /* Removes default dropdown styling */
+    cursor: pointer;
+}
+
+/* Make sure it has the same height as input fields */
+.feedback-table select,
+.feedback-table input[type="text"] {
+    height: 40px;
+}
+
+/* Add a dropdown arrow icon */
+.feedback-table select::after {
+    content: '\25BC'; /* Unicode for down arrow */
+    font-size: 12px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* Make dropdown align properly */
+.feedback-table td {
+    position: relative;
+}
+
+/* Wrapper for positioning the dropdown icon */
+.select-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Style the select dropdown */
+.select-container select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    appearance: none; /* Removes default dropdown styling */
+    cursor: pointer;
+}
+
+/* Add the dropdown icon */
+.select-container::after {
+    content: '\25BC'; /* Unicode for downward arrow (▼) */
+    font-size: 16px;
+    color: #333;
+    position: absolute;
+    right: 12px;
+    pointer-events: none; /* Prevent interaction */
+}
+
+
 /* Checkboxes & Radio Buttons */
 .checkbox-group {
     display: flex;

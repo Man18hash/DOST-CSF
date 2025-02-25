@@ -28,7 +28,7 @@
                     </ul>
                 </div>
             </li>
-            <li><a href="{{ route('admin.manage_form') }}" class="{{ request()->is('admin/manage-form') ? 'active' : '' }}">Manage Form</a></li>
+            {{-- <li><a href="{{ route('admin.manage_form') }}" class="{{ request()->is('admin/manage-form') ? 'active' : '' }}">Manage Form</a></li> --}}
         </ul>
     </div>
 

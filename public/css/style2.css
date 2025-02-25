@@ -424,24 +424,58 @@ body {
 }
 
 /* Sort By: */
+/* Adjust dropdown spacing */
 .filter-container {
     display: flex;
-    justify-content: space-between;
+    align-items: center; /* Align items vertically */
+    gap: 10px; /* Reduce space between elements */
     background: white;
-    padding: 15px;
+    padding: 8px 12px; /* Reduce padding */
     margin-bottom: 10px;
     border-radius: 5px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.filter-container label {
-    font-weight: bold;
-    margin-right: 10px;
-}
-
+/* Reduce spacing inside dropdown */
 .filter-container select {
-    padding: 5px;
+    padding: 5px 8px; /* Reduce padding */
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
+    height: 32px; /* Adjust height */
 }
+
+/* Reduce space between label and dropdown */
+.filter-container label {
+    font-weight: bold;
+    margin-right: 5px; /* Reduce space */
+    font-size: 14px;
+}
+
+/* Adjust separator in dropdown */
+.filter-container select option[disabled] {
+    font-size: 12px; /* Make separator smaller */
+    padding: 2px 5px; /* Reduce padding */
+    color: #aaa;
+    text-align: center;
+}
+
+/* Reduce spacing for refresh button */
+.refresh-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 12px; /* Reduce padding */
+    margin-left: 5px; /* Reduce space between dropdown and button */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    height: 32px; /* Match dropdown height */
+    display: flex;
+    align-items: center;
+}
+
+.refresh-btn:hover {
+    background-color: #2980b9;
+}
+

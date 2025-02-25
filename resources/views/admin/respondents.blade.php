@@ -28,7 +28,7 @@
                     </ul>
                 </div>
             </li>
-            <li><a href="{{ route('admin.manage_form') }}" class="{{ request()->is('admin/manage_form') ? 'active' : '' }}">Manage Form</a></li>
+            {{-- <li><a href="{{ route('admin.manage_form') }}" class="{{ request()->is('admin/manage_form') ? 'active' : '' }}">Manage Form</a></li> --}}
         </ul>
     </div>
 
@@ -40,31 +40,26 @@
             </div>
         </div>
 
+        <!-- Sorting Dropdown & Refresh Button -->
         <div class="filter-container">
-            <label for="sortYear">Sort by Year:</label>
-            <select id="sortYear" onchange="applyFilters()">
-                <option value="">All Years</option>
-                @foreach($years as $year)
-                    <option value="{{ $year }}">{{ $year }}</option>
+            <label for="sort">Sort By:</label>
+            <select id="sort" name="sort" onchange="applySorting()">
+                <option value="">Select an option</option>
+                @foreach($sortingOptions as $option)
+                    @if($option === "---")
+                        <option disabled>──────────</option> <!-- Separator -->
+                    @else
+                        <option value="{{ $option }}" {{ request('sort') == $option ? 'selected' : '' }}>
+                            {{ $option }}
+                        </option>
+                    @endif
                 @endforeach
             </select>
 
-            <label for="sortClientType">Sort by Client Type:</label>
-            <select id="sortClientType" onchange="applyFilters()">
-                <option value="">All Types</option>
-                <option value="Internal">Internal</option>
-                <option value="External">External</option>
-            </select>
-
-            <label for="sortClientClassification">Sort by Client Classification:</label>
-            <select id="sortClientClassification" onchange="applyFilters()">
-                <option value="">All Classifications</option>
-                <option value="General Public">General Public</option>
-                <option value="Business">Business</option>
-                <option value="Government">Government</option>
-                <option value="Student">Student</option>
-            </select>
+            <!-- Refresh Button -->
+            <button onclick="refreshPage()" class="refresh-btn">🔄 Refresh</button>
         </div>
+
 
         <!-- Respondents Table -->
         <div class="table-container">
@@ -252,22 +247,53 @@
 </script>
 
 <script>
-    function applyFilters() {
-        let year = document.getElementById("sortYear").value;
-        let clientType = document.getElementById("sortClientType").value;
-        let clientClassification = document.getElementById("sortClientClassification").value;
+    function applySorting() {
+        let sort = document.getElementById("sort").value;
 
-        let queryParams = [];
+        if (sort) {
+            window.location.href = "{{ route('admin.respondents') }}?sort=" + encodeURIComponent(sort);
+        }
+    }
 
-        if (year) queryParams.push(`year=${year}`);
-        if (clientType) queryParams.push(`client_type=${clientType}`);
-        if (clientClassification) queryParams.push(`client_classification=${clientClassification}`);
-
-        let queryString = queryParams.length > 0 ? "?" + queryParams.join("&") : "";
-        window.location.href = "{{ route('admin.respondents') }}" + queryString;
+    function refreshPage() {
+        window.location.href = "{{ route('admin.respondents') }}";
     }
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let dropdownContent = document.getElementById("yearDropdown");
+
+        fetch("{{ route('admin.years') }}")
+            .then(response => response.json())
+            .then(data => {
+                dropdownContent.innerHTML = ''; // 🛠 Clear existing years before appending
+
+                // 🛠 Add "All Years" option first
+                let allYearsItem = document.createElement("li");
+                let allYearsLink = document.createElement("a");
+                allYearsLink.href = "{{ route('admin.respondents') }}";
+                allYearsLink.textContent = "All Years";
+                allYearsItem.appendChild(allYearsLink);
+                dropdownContent.appendChild(allYearsItem);
+
+                let uniqueYears = new Set(); // 🛠 Ensure unique years
+
+                data.forEach(year => {
+                    if (!uniqueYears.has(year)) { // Prevent duplicate years
+                        uniqueYears.add(year);
+                        let listItem = document.createElement("li");
+                        let link = document.createElement("a");
+                        link.href = "{{ url('admin/respondents/filter') }}/" + year;
+                        link.textContent = year;
+                        listItem.appendChild(link);
+                        dropdownContent.appendChild(listItem);
+                    }
+                });
+            })
+            .catch(error => console.error("Error fetching years:", error));
+    });
+</script>
 
 </body>
 </html>

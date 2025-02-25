@@ -104,35 +104,6 @@ class AdminDashboardController extends Controller
             'ageDistribution', 'classificationData', 'internalCount', 'externalCount'
         ));
     }
-
-
-    public function respondents(Request $request)
-    {
-        $year = $request->input('year');
-        $clientType = $request->input('client_type');
-        $clientClassification = $request->input('client_classification');
-
-        $query = Feedback::query();
-
-        // Filter by Year
-        if ($year) {
-            $query->whereYear('created_at', $year);
-        }
-
-        // Filter by Client Type
-        if ($clientType) {
-            $query->where('client_type', $clientType);
-        }
-
-        // Filter by Client Classification
-        if ($clientClassification) {
-            $query->whereJsonContains('client_classification', $clientClassification);
-        }
-
-        $respondents = $query->get();
-        $years = Feedback::selectRaw('YEAR(created_at) as year')->distinct()->orderBy('year', 'desc')->pluck('year');
-
-        return view('admin.respondents', compact('respondents', 'years'));
-    }
+    
 
 }

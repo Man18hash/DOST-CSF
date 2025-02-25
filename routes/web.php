@@ -25,6 +25,7 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
     // Respondents List
     Route::get('/respondents', [RespondentController::class, 'index'])->name('admin.respondents');
+    Route::get('/respondents', [RespondentController::class, 'respondents'])->name('admin.respondents');
     Route::get('/respondents/{id}/preview', [RespondentController::class, 'preview'])->name('admin.respondent.preview');
 
     // Manage Form Routes
@@ -35,4 +36,8 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
     // Logout Route
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+
 });
+
+Route::get('/admin/respondents/filter/{year}', [RespondentController::class, 'filterByYear'])
+    ->name('admin.respondents.filter');
