@@ -41,3 +41,11 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
 Route::get('/admin/respondents/filter/{year}', [RespondentController::class, 'filterByYear'])
     ->name('admin.respondents.filter');
+
+// Export PDF
+Route::get('/admin/respondents/export/pdf/{year}', [RespondentController::class, 'exportToPDF'])
+    ->name('admin.respondents.export.pdf');
+
+// Export CSV
+Route::get('/admin/respondents/export/csv/{year}', [RespondentController::class, 'exportCSV'])
+    ->name('admin.respondents.export.csv');

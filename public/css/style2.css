@@ -224,8 +224,10 @@ body {
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    max-height: 650px;
+    max-height: calc(100vh - 200px); /* Dynamically adjust based on viewport height */
+    min-height: 400px; /* Ensures it doesn’t shrink too much */
 }
+
 
 /* Ensure table stays within scrollable container */
 .respondents-table {
@@ -391,7 +393,7 @@ body {
     padding: 5px 0;
     width: 90%;
     position: relative;
-    max-height: 200px; /* Prevents it from becoming too large */
+    max-height: 250px; /* Prevents it from becoming too large */
     overflow-y: auto; /* Scrollable if too many years */
 }
 
@@ -479,3 +481,48 @@ body {
     background-color: #2980b9;
 }
 
+/* Highlight selected year */
+.active-year {
+    font-weight: bold;
+    background-color: #1abc9c; /* Highlight color */
+    color: white !important;
+    border-radius: 5px;
+    padding: 5px;
+    display: block;
+}
+
+/* Keep dropdown open when active */
+.dropdown.active .dropdown-container {
+    display: block !important;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.export-btn {
+    padding: 8px 14px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.export-btn.btn-danger {
+    background-color: #e74c3c;
+}
+
+.export-btn.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.export-btn.btn-success {
+    background-color: #2ecc71;
+}
+
+.export-btn.btn-success:hover {
+    background-color: #27ae60;
+}

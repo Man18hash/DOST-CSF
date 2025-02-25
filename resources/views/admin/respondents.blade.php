@@ -262,14 +262,16 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        let dropdownContainer = document.getElementById("yearDropdownContainer");
+        let dropdownButton = document.querySelector(".dropdown-btn");
         let dropdownContent = document.getElementById("yearDropdown");
 
+        // Fetch years dynamically and mark the active one
         fetch("{{ route('admin.years') }}")
             .then(response => response.json())
             .then(data => {
-                dropdownContent.innerHTML = ''; // 🛠 Clear existing years before appending
+                dropdownContent.innerHTML = ''; // Clear existing items
 
-                // 🛠 Add "All Years" option first
                 let allYearsItem = document.createElement("li");
                 let allYearsLink = document.createElement("a");
                 allYearsLink.href = "{{ route('admin.respondents') }}";
@@ -277,22 +279,48 @@
                 allYearsItem.appendChild(allYearsLink);
                 dropdownContent.appendChild(allYearsItem);
 
-                let uniqueYears = new Set(); // 🛠 Ensure unique years
+                let currentYear = "{{ $year ?? '' }}"; // Get the selected year from Blade
 
                 data.forEach(year => {
-                    if (!uniqueYears.has(year)) { // Prevent duplicate years
-                        uniqueYears.add(year);
-                        let listItem = document.createElement("li");
-                        let link = document.createElement("a");
-                        link.href = "{{ url('admin/respondents/filter') }}/" + year;
-                        link.textContent = year;
-                        listItem.appendChild(link);
-                        dropdownContent.appendChild(listItem);
+                    let listItem = document.createElement("li");
+                    let link = document.createElement("a");
+                    link.href = "{{ url('admin/respondents/filter') }}/" + year;
+                    link.textContent = year;
+
+                    // Highlight selected year
+                    if (year == currentYear) {
+                        link.classList.add("active-year"); // Add active class for highlighting
                     }
+
+                    listItem.appendChild(link);
+                    dropdownContent.appendChild(listItem);
                 });
+
+                // Keep dropdown visible if a year is selected
+                if (currentYear) {
+                    dropdownContainer.style.display = "block";
+                    dropdownButton.classList.add("active"); // Ensure dropdown stays open
+                }
             })
             .catch(error => console.error("Error fetching years:", error));
+
+        // Ensure dropdown stays open when clicking
+        dropdownButton.addEventListener("click", function (event) {
+            event.stopPropagation();
+            dropdownContainer.classList.toggle("active");
+        });
+
+        // Prevent dropdown from closing on click inside
+        dropdownContainer.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function () {
+            dropdownContainer.classList.remove("active");
+        });
     });
+
 </script>
 
 </body>

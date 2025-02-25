@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Feedback; // Import the Feedback model
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Response;
+
 
 class RespondentController extends Controller
 {
@@ -99,6 +102,8 @@ class RespondentController extends Controller
     public function filterByYear($year, Request $request)
     {
         $quarter = $request->input('quarter');
+        $age = $request->input('age');
+        $gender = $request->input('gender');
 
         // Start with a base query filtering by the year
         $query = Feedback::whereYear('date', $year);
@@ -116,10 +121,102 @@ class RespondentController extends Controller
             }
         }
 
+        // 🔥 Apply Age and Gender Filtering
+        if ($age) {
+            $query->where('age', $age);
+        }
+
+        if ($gender) {
+            $query->where('sex', $gender);
+        }
+
+        // Get the filtered respondents
         $respondents = $query->get();
+
+        // Get unique years for the dropdown
         $years = Feedback::selectRaw('YEAR(date) as year')->distinct()->orderBy('year', 'desc')->pluck('year');
 
-        return view('admin.respondents_year', compact('respondents', 'years', 'year', 'quarter'));
+        // Get unique ages for filtering
+        $ages = Feedback::whereYear('date', $year)->distinct()->pluck('age')->sort();
+
+        return view('admin.respondents_year', compact('respondents', 'years', 'year', 'quarter', 'ages'));
+    }
+
+
+    public function exportToPDF($year)
+    {
+        // Define quarters and their month ranges
+        $quarters = [
+            'Q1 (January - March)' => [1, 2, 3],
+            'Q2 (April - June)' => [4, 5, 6],
+            'Q3 (July - September)' => [7, 8, 9],
+            'Q4 (October - December)' => [10, 11, 12]
+        ];
+
+        $respondentsByQuarter = [];
+
+        // Loop through each quarter and fetch respondents
+        foreach ($quarters as $quarterTitle => $months) {
+            $respondentsByQuarter[$quarterTitle] = Feedback::whereYear('date', $year)
+                ->whereIn(\DB::raw('MONTH(date)'), $months)
+                ->get();
+        }
+
+        // Generate PDF with grouped respondents
+        $pdf = Pdf::loadView('exports.respondents_pdf', compact('respondentsByQuarter', 'year'));
+
+        return $pdf->download("respondents_$year.pdf");
+    }
+
+
+    public function exportCSV($year, Request $request)
+    {
+        $quarter = $request->input('quarter');
+        $age = $request->input('age');
+        $gender = $request->input('gender');
+
+        $query = Feedback::whereYear('date', $year);
+
+        if ($quarter) {
+            if ($quarter == 1) {
+                $query->whereMonth('date', '>=', 1)->whereMonth('date', '<=', 3);
+            } elseif ($quarter == 2) {
+                $query->whereMonth('date', '>=', 4)->whereMonth('date', '<=', 6);
+            } elseif ($quarter == 3) {
+                $query->whereMonth('date', '>=', 7)->whereMonth('date', '<=', 9);
+            } elseif ($quarter == 4) {
+                $query->whereMonth('date', '>=', 10)->whereMonth('date', '<=', 12);
+            }
+        }
+
+        if ($age) {
+            $query->where('age', $age);
+        }
+
+        if ($gender) {
+            $query->where('sex', $gender);
+        }
+
+        $respondents = $query->get();
+
+        $filename = "Respondents_$year.csv";
+        $handle = fopen($filename, 'w');
+        fputcsv($handle, ['Name', 'Age', 'Gender', 'Unit Provider', 'Service Availed', 'DOST Employee']);
+
+        foreach ($respondents as $respondent) {
+            fputcsv($handle, [
+                $respondent->name,
+                $respondent->age,
+                $respondent->sex,
+                $respondent->unit_provider,
+                $respondent->assistance_availed,
+                $respondent->DOST_employee
+            ]);
+        }
+
+        fclose($handle);
+
+        return response()->download($filename)->deleteFileAfterSend(true);
     }
 
 }
