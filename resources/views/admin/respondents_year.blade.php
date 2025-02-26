@@ -102,16 +102,35 @@
 
             <!-- Export Buttons - Now Aligned Properly -->
             <div class="export-buttons" style="margin-left: auto; display: flex; gap: 10px;">
-                <a href="{{ route('admin.respondents.export.pdf', ['year' => $year, 'quarter' => request('quarter'), 'age' => request('age'), 'gender' => request('gender')]) }}"
-                class="btn btn-danger export-btn">
-                    📄 Export PDF
+                <a id="exportPdfBtn" href="{{ route('admin.respondents.export.pdf', ['year' => $year, 'quarter' => request('quarter')]) }}"
+                    class="btn btn-danger export-btn">
+                     📄 Export PDF
                 </a>
 
-                <a href="{{ route('admin.respondents.export.csv', ['year' => $year, 'quarter' => request('quarter'), 'age' => request('age'), 'gender' => request('gender')]) }}"
-                class="btn btn-success export-btn">
-                    📊 Export CSV
+                <a id="exportCsvBtn" href="{{ route('admin.respondents.export.csv', ['year' => $year, 'quarter' => request('quarter')]) }}"
+                    class="btn btn-success export-btn">
+                     📊 Export CSV
                 </a>
             </div>
+
+            <script>
+                function updateExportLinks() {
+                    let quarter = document.getElementById("quarter").value;
+                    let basePdfUrl = "{{ route('admin.respondents.export.pdf', ['year' => $year]) }}";
+                    let baseCsvUrl = "{{ route('admin.respondents.export.csv', ['year' => $year]) }}";
+
+                    if (quarter) {
+                        basePdfUrl += `?quarter=${quarter}`;
+                        baseCsvUrl += `?quarter=${quarter}`;
+                    }
+
+                    document.getElementById("exportPdfBtn").href = basePdfUrl;
+                    document.getElementById("exportCsvBtn").href = baseCsvUrl;
+                }
+
+                document.getElementById("quarter").addEventListener("change", updateExportLinks);
+            </script>
+
 
         </div>
 
@@ -241,6 +260,24 @@
 
         window.location.href = url;
     }
+</script>
+
+<script>
+    function updateExportLinks() {
+        let quarter = document.getElementById("quarter").value;
+        let basePdfUrl = "{{ route('admin.respondents.export.pdf', ['year' => $year]) }}";
+        let baseCsvUrl = "{{ route('admin.respondents.export.csv', ['year' => $year]) }}";
+
+        if (quarter) {
+            basePdfUrl += `?quarter=${quarter}`;
+            baseCsvUrl += `?quarter=${quarter}`;
+        }
+
+        document.getElementById("exportPdfBtn").href = basePdfUrl;
+        document.getElementById("exportCsvBtn").href = baseCsvUrl;
+    }
+
+    document.getElementById("quarter").addEventListener("change", updateExportLinks);
 </script>
 
 </body>

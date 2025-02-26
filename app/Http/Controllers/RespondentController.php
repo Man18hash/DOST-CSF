@@ -143,63 +143,68 @@ class RespondentController extends Controller
     }
 
 
-    public function exportToPDF($year)
+    public function exportToPDF($year, Request $request)
     {
-        // Define quarters and their month ranges
+        $quarter = $request->input('quarter'); // Get selected quarter
+
+        // Define quarter-month mapping
         $quarters = [
-            'Q1 (January - March)' => [1, 2, 3],
-            'Q2 (April - June)' => [4, 5, 6],
-            'Q3 (July - September)' => [7, 8, 9],
-            'Q4 (October - December)' => [10, 11, 12]
+            '1' => ['Q1 (January - March)', [1, 2, 3]],
+            '2' => ['Q2 (April - June)', [4, 5, 6]],
+            '3' => ['Q3 (July - September)', [7, 8, 9]],
+            '4' => ['Q4 (October - December)', [10, 11, 12]]
         ];
 
         $respondentsByQuarter = [];
 
-        // Loop through each quarter and fetch respondents
-        foreach ($quarters as $quarterTitle => $months) {
-            $respondentsByQuarter[$quarterTitle] = Feedback::whereYear('date', $year)
-                ->whereIn(\DB::raw('MONTH(date)'), $months)
+        if ($quarter && isset($quarters[$quarter])) {
+            // If a quarter is selected, fetch only that quarter's data
+            $title = $quarters[$quarter][0];
+            $respondentsByQuarter[$title] = Feedback::whereYear('date', $year)
+                ->whereIn(\DB::raw('MONTH(date)'), $quarters[$quarter][1])
                 ->get();
+        } else {
+            // If no quarter is selected, fetch all records within the year
+            foreach ($quarters as $key => [$title, $months]) {
+                $respondentsByQuarter[$title] = Feedback::whereYear('date', $year)
+                    ->whereIn(\DB::raw('MONTH(date)'), $months)
+                    ->get();
+            }
         }
 
-        // Generate PDF with grouped respondents
-        $pdf = Pdf::loadView('exports.respondents_pdf', compact('respondentsByQuarter', 'year'));
+        // Prevent exporting empty PDFs
+        if (empty(array_filter($respondentsByQuarter))) {
+            return back()->with('error', 'No respondents found for the selected filters.');
+        }
 
-        return $pdf->download("respondents_$year.pdf");
+        // Load the PDF view with the filtered data
+        $pdf = Pdf::loadView('exports.respondents_pdf', compact('respondentsByQuarter', 'year', 'quarter'));
+
+        return $pdf->download("respondents_{$year}_quarter_{$quarter}.pdf");
     }
 
 
     public function exportCSV($year, Request $request)
     {
         $quarter = $request->input('quarter');
-        $age = $request->input('age');
-        $gender = $request->input('gender');
+
+        // Define quarter-month mapping
+        $quarters = [
+            '1' => [1, 2, 3],
+            '2' => [4, 5, 6],
+            '3' => [7, 8, 9],
+            '4' => [10, 11, 12]
+        ];
 
         $query = Feedback::whereYear('date', $year);
 
-        if ($quarter) {
-            if ($quarter == 1) {
-                $query->whereMonth('date', '>=', 1)->whereMonth('date', '<=', 3);
-            } elseif ($quarter == 2) {
-                $query->whereMonth('date', '>=', 4)->whereMonth('date', '<=', 6);
-            } elseif ($quarter == 3) {
-                $query->whereMonth('date', '>=', 7)->whereMonth('date', '<=', 9);
-            } elseif ($quarter == 4) {
-                $query->whereMonth('date', '>=', 10)->whereMonth('date', '<=', 12);
-            }
-        }
-
-        if ($age) {
-            $query->where('age', $age);
-        }
-
-        if ($gender) {
-            $query->where('sex', $gender);
+        if ($quarter && isset($quarters[$quarter])) {
+            $query->whereIn(\DB::raw('MONTH(date)'), $quarters[$quarter]);
         }
 
         $respondents = $query->get();
 
-        $filename = "Respondents_$year.csv";
+        $filename = "Respondents_{$year}_quarter_{$quarter}.csv";
         $handle = fopen($filename, 'w');
         fputcsv($handle, ['Name', 'Age', 'Gender', 'Unit Provider', 'Service Availed', 'DOST Employee']);
 

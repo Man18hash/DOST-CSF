@@ -224,7 +224,7 @@ body {
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    max-height: calc(100vh - 200px); /* Dynamically adjust based on viewport height */
+    max-height: calc(105vh - 205px); /* Dynamically adjust based on viewport height */
     min-height: 400px; /* Ensures it doesn’t shrink too much */
 }
 
