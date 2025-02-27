@@ -211,7 +211,6 @@ class RespondentController extends Controller
         foreach ($respondents as $respondent) {
             fputcsv($handle, [
                 $respondent->name,
-                $respondent->age,
                 $respondent->sex,
                 $respondent->unit_provider,
                 $respondent->assistance_availed,

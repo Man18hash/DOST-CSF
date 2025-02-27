@@ -161,38 +161,12 @@
                     <tr>
                         <td><strong>DOST 02 Office/Unit Provider:</strong></td>
                         <td>
-                            <div class="select-container">
-                                <select name="unit_provider" required>
-                                    <option value="" disabled selected>Select an Office/Unit</option>
-                                    <optgroup label="OFFICE OF THE REGIONAL DIRECTOR (ORD)">
-                                        <option value="PSTO Batanes">PSTO Batanes</option>
-                                        <option value="PSTO Cagayan">PSTO Cagayan</option>
-                                        <option value="PSTO Isabela">PSTO Isabela</option>
-                                        <option value="PSTO Nueva Vizcaya">PSTO Nueva Vizcaya</option>
-                                        <option value="PSTO Quirino">PSTO Quirino</option>
-                                        <option value="Records Management Unit">Records Management Unit</option>
-                                        <option value="Grant-in-Aid (GIA)">Grant-in-Aid (GIA)</option>
-                                    </optgroup>
-                                    <optgroup label="FINANCE AND ADMINISTRATIVE SUPPORT SERVICES (FASS)">
-                                        <option value="Accounting, Budgeting, and Cashiering (ABC)">Accounting, Budgeting, and Cashiering (ABC)</option>
-                                        <option value="Purchasing">Purchasing</option>
-                                        <option value="Maintenance">Maintenance</option>
-                                    </optgroup>
-                                    <optgroup label="TECHNICAL OPERATIONS SERVICES (TOS)">
-                                        <option value="Management Information Services (MIS)">Management Information Services (MIS)</option>
-                                        <option value="Research, Development, and Innovation Management (ReDIM)">Research, Development, and Innovation Management (ReDIM)</option>
-                                        <option value="S&T Information and Promotion">S&T Information and Promotion</option>
-                                        <option value="CEST">CEST</option>
-                                        <option value="STARBOOKS">STARBOOKS</option>
-                                        <option value="DRRM">DRRM</option>
-                                        <option value="GAD">GAD</option>
-                                    </optgroup>
-                                    <optgroup label="FIELD OPERATIONS SERVICES (FOS)">
-                                        <option value="SETUP RPMO">SETUP RPMO</option>
-                                        <option value="Packaging and Labelling">Packaging and Labelling</option>
-                                    </optgroup>
-                                </select>
-                            </div>
+                            <select name="unit_provider" id="unit_provider" required>
+                                <option value="" disabled selected>Select an Office/Unit</option>
+                                @foreach($unitProviders as $provider)
+                                    <option value="{{ $provider->id }}">{{ $provider->unit_name }}</option>
+                                @endforeach
+                            </select>
                         </td>
                     </tr>
 
@@ -200,10 +174,34 @@
                         <td><strong>Service/Transaction/Assistance Availed:</strong></td>
                         <td><input type="text" name="assistance_availed" required></td>
                     </tr>
+
                     <tr>
                         <td><strong>Name of DOST 02 Employee:</strong></td>
-                        <td><input type="text" name="DOST_employee"></td>
+                        <td>
+                            <select name="DOST_employee" id="DOST_employee" required>
+                                <option value="" disabled selected>Select an Employee</option>
+                            </select>
+                        </td>
                     </tr>
+
+                    <script>
+                        document.getElementById('unit_provider').addEventListener('change', function() {
+                            let unitProviderId = this.value;
+                            let employeeDropdown = document.getElementById('DOST_employee');
+
+                            fetch(`/get-employees/${unitProviderId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    employeeDropdown.innerHTML = '<option value="" disabled selected>Select an Employee</option>';
+                                    for (const [id, name] of Object.entries(data)) {
+                                        let option = document.createElement('option');
+                                        option.value = id;
+                                        option.textContent = name;
+                                        employeeDropdown.appendChild(option);
+                                    }
+                                });
+                        });
+                    </script>
 
                     <tr>
                         <td></td>

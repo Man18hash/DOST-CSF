@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px 30px; /* Smaller margins to fit content better */
+}
+
+/* HEADER STYLING */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    gap: 10px;
+}
+
+/* LOGO */
+.logo-container {
+    flex: 0 0 auto;
+    text-align: center;
+}
+
+.logo {
+    width: 60px; /* Slightly reduced size */
+    height: auto;
+}
+
+/* HEADER TEXT */
+.header-text {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.header-text h1 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 3px 0;
+}
+
+.header-text h2 {
+    font-size: 14px;
+    margin: 3px 0;
+}
+
+.sub-header {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 3px;
+}
+
+/* HEADER LINE */
+.header-line {
+    width: 100%;
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+}
+
+/* QUARTER TITLE */
+.quarter-title {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* TABLE STYLING */
+.table-container {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed; /* Ensures table does not expand beyond page */
+    border-collapse: collapse;
+    margin: 10px auto;
+    font-size: 9px; /* Reduced font size */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 3px; /* Smaller padding to fit content */
+    text-align: center;
+    word-wrap: break-word; /* Wraps text instead of overflowing */
+    overflow-wrap: break-word;
+}
+
+th {
+    background-color: #3498db;
+    color: white;
+    font-size: 10px;
+}
+
+/* NO DATA MESSAGE */
+.no-data {
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 5px;
+}

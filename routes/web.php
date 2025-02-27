@@ -12,6 +12,9 @@ use App\Http\Controllers\YearController;
 Route::get('/', [FeedbackController::class, 'index'])->name('home');
 Route::post('/feedback-store', [FeedbackController::class, 'store'])->name('feedback.store');
 
+Route::get('/get-employees/{unitProviderId}', [FeedbackController::class, 'getEmployeesByUnit']);
+Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.form');
+
 // Admin Authentication Routes
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');

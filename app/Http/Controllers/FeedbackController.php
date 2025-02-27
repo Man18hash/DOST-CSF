@@ -4,12 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Feedback;
+use App\Models\DOSTEmployee;
+use App\Models\UnitProvider;
+
 
 class FeedbackController extends Controller
 {
     public function index()
     {
-        return view('feedback_form');
+        $unitProviders = UnitProvider::all();
+        return view('feedback_form', compact('unitProviders'));
+    }
+
+    public function getEmployeesByUnit($unitProviderId)
+    {
+        $employees = DOSTEmployee::where('unit_provider_id', $unitProviderId)->pluck('name', 'id');
+        return response()->json($employees);
     }
 
     // ✅ Add this method to handle form submissions
