@@ -21,7 +21,9 @@ class FeedbackController extends Controller
 
     public function getEmployeesByUnit($unitProviderId)
     {
-        $employees = DOSTEmployee::where('unit_provider_id', $unitProviderId)->pluck('name', 'id');
+        $employees = DOSTEmployee::where('unit_provider_id', $unitProviderId)
+            ->where('status', 'Active') // Only fetch active employees
+            ->pluck('name', 'id');
         return response()->json($employees);
     }
 

@@ -386,15 +386,19 @@ body {
 
 /* Dropdown Container */
 .dropdown-container {
-    display: none;
+    display: none;  /* Initially hidden */
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 5px 0;
     width: 90%;
     position: relative;
-    max-height: 250px; /* Prevents it from becoming too large */
-    overflow-y: auto; /* Scrollable if too many years */
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.dropdown-container.active {
+    display: block !important;
 }
 
 /* Dropdown List Items */
@@ -413,6 +417,7 @@ body {
     text-decoration: none;
     font-size: 14px;
     display: block;
+    padding: 8px 12px;
     transition: background 0.3s;
 }
 

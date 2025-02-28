@@ -7,6 +7,8 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\RespondentController;
 use App\Http\Controllers\FormSettingController;
 use App\Http\Controllers\YearController;
+use App\Http\Controllers\UnitEmployeeController;
+
 
 // Public Routes
 Route::get('/', [FeedbackController::class, 'index'])->name('home');
@@ -52,3 +54,10 @@ Route::get('/admin/respondents/export/pdf/{year}', [RespondentController::class,
 // Export CSV
 Route::get('/admin/respondents/export/csv/{year}', [RespondentController::class, 'exportCSV'])
     ->name('admin.respondents.export.csv');
+
+Route::get('/admin/units', [UnitEmployeeController::class, 'units'])->name('admin.units');
+Route::get('/admin/employees', [UnitEmployeeController::class, 'employees'])->name('admin.employees');
+
+Route::post('/admin/units/toggle/{id}', [UnitEmployeeController::class, 'toggleUnitStatus'])->name('admin.toggle_unit_status');
+Route::post('/admin/employees/toggle/{id}', [UnitEmployeeController::class, 'toggleEmployeeStatus'])->name('admin.toggle_employee_status');
+

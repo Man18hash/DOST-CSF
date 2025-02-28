@@ -9,13 +9,19 @@ class UnitProviderSeeder extends Seeder
 {
     public function run()
     {
-        UnitProvider::firstOrCreate(['unit_name' => 'ORD']);
-        UnitProvider::firstOrCreate(['unit_name' => 'FASS']);
-        UnitProvider::firstOrCreate(['unit_name' => 'TOS']);
-        UnitProvider::firstOrCreate(['unit_name' => 'PSTO Batanes']);
-        UnitProvider::firstOrCreate(['unit_name' => 'PSTO Cagayan']);
-        UnitProvider::firstOrCreate(['unit_name' => 'PSTO Isabela']);
-        UnitProvider::firstOrCreate(['unit_name' => 'PSTO Quirino']);
-        UnitProvider::firstOrCreate(['unit_name' => 'PSTO Nueva Vizcaya']);
+        $unitProviders = [
+            'ORD', 'FASS', 'TOS',
+            'PSTO Batanes', 'PSTO Cagayan',
+            'PSTO Isabela', 'PSTO Quirino', 'PSTO Nueva Vizcaya'
+        ];
+
+        foreach ($unitProviders as $unit) {
+            UnitProvider::firstOrCreate(
+                ['unit_name' => $unit],
+                ['status' => 'Active'] // Ensuring a default status
+            );
+        }
+
+        echo "✅ Unit Providers Seeded Successfully!\n";
     }
 }

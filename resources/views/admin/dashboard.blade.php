@@ -20,15 +20,27 @@
         <ul class="sidebar-menu">
             <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">Dashboard</a></li>
             <li><a href="{{ route('admin.respondents') }}" class="{{ request()->is('admin/respondents') ? 'active' : '' }}">Respondents</a></li>
+
+            <!-- Years Dropdown -->
             <li class="dropdown">
-                <a href="#" class="dropdown-btn" onclick="toggleDropdown()">Years ▼</a>
+                <a href="#" class="dropdown-btn" onclick="toggleDropdown('yearDropdownContainer')">Years ▼</a>
                 <div class="dropdown-container" id="yearDropdownContainer">
                     <ul class="dropdown-content" id="yearDropdown">
                         <li><a href="{{ route('admin.respondents') }}">All Years</a></li>
                     </ul>
                 </div>
             </li>
-            {{-- <li><a href="{{ route('admin.manage_form') }}" class="{{ request()->is('admin/manage-form') ? 'active' : '' }}">Manage Form</a></li> --}}
+
+            <!-- Manage Units & Employees Dropdown -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-btn" onclick="toggleDropdown('manageDropdownContainer')">Manage Units/Employees ▼</a>
+                <div class="dropdown-container" id="manageDropdownContainer">
+                    <ul class="dropdown-content">
+                        <li><a href="{{ route('admin.units') }}" class="{{ request()->is('admin/units') ? 'active' : '' }}">Units</a></li>
+                        <li><a href="{{ route('admin.employees') }}" class="{{ request()->is('admin/employees') ? 'active' : '' }}">Employees</a></li>
+                    </ul>
+                </div>
+            </li>
         </ul>
     </div>
 
@@ -148,9 +160,19 @@
 
 
 <script>
-    function toggleDropdown() {
-        document.querySelector('.dropdown').classList.toggle('active');
+    function toggleDropdown(dropdownId) {
+        // Close all dropdowns first
+        document.querySelectorAll(".dropdown-container").forEach(container => {
+            if (container.id !== dropdownId) {
+                container.style.display = "none";
+            }
+        });
+
+        // Toggle the selected dropdown
+        let dropdown = document.getElementById(dropdownId);
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
     }
+
 
     document.addEventListener("DOMContentLoaded", function () {
         let dropdownContent = document.getElementById("yearDropdown");

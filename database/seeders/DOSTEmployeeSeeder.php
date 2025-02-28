@@ -119,21 +119,28 @@ class DOSTEmployeeSeeder extends Seeder
             ['name' => 'Clarenet J. Balderas', 'employee_id' => 'CJB-0825-126', 'unit_provider' => 'PSTO Nueva Vizcaya'],
             ['name' => 'Lhea Lee C. Galap', 'employee_id' => 'LCG-0404-177', 'unit_provider' => 'PSTO Nueva Vizcaya'],
             ['name' => 'Dominique P. Medina', 'employee_id' => 'DPM-1014-252', 'unit_provider' => 'PSTO Nueva Vizcaya'],
+
         ];
 
         // Insert Employees into the Database
         foreach ($employees as $employee) {
-            if (isset($units[$employee['unit_provider']])) {
-                DOSTEmployee::updateOrCreate(
-                    ['employee_id' => $employee['employee_id']], // Condition to check
-                    [
-                        'name' => $employee['name'],
-                        'unit_provider_id' => $units[$employee['unit_provider']],
-                        'status' => 'Active'
-                    ]
-                );
+            // Ensure the UnitProvider exists before inserting the employee
+            if (!isset($units[$employee['unit_provider']])) {
+                echo "⚠️ Warning: Unit Provider '{$employee['unit_provider']}' not found. Skipping {$employee['name']}.\n";
+                continue;
             }
+
+            // Insert employee with a valid unit_provider_id
+            DOSTEmployee::updateOrCreate(
+                ['employee_id' => $employee['employee_id']], // Ensure uniqueness
+                [
+                    'name' => $employee['name'],
+                    'unit_provider_id' => $units[$employee['unit_provider']],
+                    'status' => 'Active' // Default status for all employees
+                ]
+            );
         }
 
+        echo "✅ DOST Employees Seeded Successfully!\n";
     }
 }

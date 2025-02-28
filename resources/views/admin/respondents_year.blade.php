@@ -18,12 +18,10 @@
             <span class="sidebar-title">DOST CSF</span>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-            <li>
-                <a href="{{ route('admin.respondents') }}" class="{{ request()->routeIs('admin.respondents') ? 'active' : '' }}">
-                    Respondents
-                </a>
-            </li>
+            <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">Dashboard</a></li>
+            <li><a href="{{ route('admin.respondents') }}" class="{{ request()->is('admin/respondents') ? 'active' : '' }}">Respondents</a></li>
+
+            <!-- Years Dropdown -->
             <li class="dropdown">
                 <a href="#" class="dropdown-btn" onclick="toggleDropdown()">Years ▼</a>
                 <div class="dropdown-container" id="yearDropdownContainer">
@@ -36,7 +34,19 @@
                     </ul>
                 </div>
             </li>
+
+            <!-- Manage Units & Employees Dropdown -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-btn" onclick="toggleDropdown('manageDropdownContainer')">Manage Units/Employees ▼</a>
+                <div class="dropdown-container" id="manageDropdownContainer">
+                    <ul class="dropdown-content">
+                        <li><a href="{{ route('admin.units') }}" class="{{ request()->is('admin/units') ? 'active' : '' }}">Units</a></li>
+                        <li><a href="{{ route('admin.employees') }}" class="{{ request()->is('admin/employees') ? 'active' : '' }}">Employees</a></li>
+                    </ul>
+                </div>
+            </li>
         </ul>
+
     </div>
 
     <!-- Main Content -->
@@ -201,6 +211,23 @@
 </script>
 
 <script>
+    function toggleDropdown(dropdownId) {
+        let dropdown = document.getElementById(dropdownId);
+
+        // Close other dropdowns first
+        document.querySelectorAll(".dropdown-container").forEach(container => {
+            if (container.id !== dropdownId) {
+                container.style.display = "none";
+            }
+        });
+
+        // Toggle the selected dropdown
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+
+        // Store open state in session storage (so it remains open after page reload)
+        sessionStorage.setItem(dropdownId, dropdown.style.display);
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         let dropdownContainer = document.getElementById("yearDropdownContainer");
         let dropdownButton = document.querySelector(".dropdown-btn");
@@ -231,6 +258,7 @@
             dropdownContainer.classList.remove("active");
         });
     });
+
 </script>
 
 <script>

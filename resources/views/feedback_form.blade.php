@@ -164,7 +164,10 @@
                             <select name="unit_provider" id="unit_provider" required>
                                 <option value="" disabled selected>Select an Office/Unit</option>
                                 @foreach($unitProviders as $provider)
-                                    <option value="{{ $provider->id }}">{{ $provider->unit_name }}</option>
+                                    <option value="{{ $provider->id }}"
+                                            {{ $provider->status === 'Inactive' ? 'disabled style=background:#ccc;color:#666' : '' }}>
+                                        {{ $provider->unit_name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </td>
@@ -181,7 +184,9 @@
                             <select name="DOST_employee" id="DOST_employee" required>
                                 <option value="" disabled selected>Select an Employee</option>
                                 @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                    @if($employee->status === 'Active')
+                                        <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </td>
