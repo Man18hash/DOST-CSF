@@ -13,14 +13,18 @@ class FeedbackController extends Controller
     public function index()
     {
         $unitProviders = UnitProvider::all();
-        return view('feedback_form', compact('unitProviders'));
+        $employees = DOSTEmployee::all(); // Fetch employees
+
+        return view('feedback_form', compact('unitProviders', 'employees'));
     }
+
 
     public function getEmployeesByUnit($unitProviderId)
     {
         $employees = DOSTEmployee::where('unit_provider_id', $unitProviderId)->pluck('name', 'id');
         return response()->json($employees);
     }
+
 
     // ✅ Add this method to handle form submissions
     public function store(Request $request)

@@ -180,6 +180,9 @@
                         <td>
                             <select name="DOST_employee" id="DOST_employee" required>
                                 <option value="" disabled selected>Select an Employee</option>
+                                @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                @endforeach
                             </select>
                         </td>
                     </tr>
@@ -199,7 +202,8 @@
                                         option.textContent = name;
                                         employeeDropdown.appendChild(option);
                                     }
-                                });
+                                })
+                                .catch(error => console.error('Error fetching employees:', error));
                         });
                     </script>
 
@@ -392,4 +396,3 @@
         </div>
     </div>
 @endsection
-
