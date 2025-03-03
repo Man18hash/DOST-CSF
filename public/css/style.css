@@ -99,7 +99,7 @@ body {
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
-    top: -50px; /* Adjusted to align properly */
+    top: -20px; /* Adjusted to align properly */
 }
 
 /* Title Styling */
@@ -155,7 +155,6 @@ body {
     border-radius: 4px;
     font-size: 14px;
 }
-
 
 /* Unit Provider Container */
 /* Style the dropdown to look like a normal input */
@@ -221,7 +220,6 @@ body {
     right: 12px;
     pointer-events: none; /* Prevent interaction */
 }
-
 
 /* Checkboxes & Radio Buttons */
 .checkbox-group {
@@ -324,7 +322,6 @@ body {
     margin: 0 5px;
 }
 
-
 /* Admin Login Page Styles */
 .admin-login-container {
     display: flex;
@@ -380,4 +377,61 @@ body {
 
 .btn-login:hover {
     background-color: #1a2b73;
+}
+
+/* Responsive adjustments for tablets and smaller devices */
+@media only screen and (max-width: 768px) {
+    .form-container1,
+    .form-container2 {
+        width: 95%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    .title-text {
+        font-size: 35px;
+    }
+    .feedback-table,
+    .criteria-table {
+        font-size: 14px;
+    }
+    .feedback-table td,
+    .criteria-table td,
+    .criteria-table th {
+        padding: 10px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+}
+
+/* Additional adjustments for mobile devices (max-width: 480px, e.g., iPhone SE) */
+@media only screen and (max-width: 480px) {
+    .title-text {
+        font-size: 24px !important;
+    }
+    .form-container1,
+    .form-container2 {
+        padding: 15px;
+        margin: 10px auto;
+    }
+    .feedback-table,
+    .criteria-table {
+        font-size: 12px;
+    }
+    .feedback-table td,
+    .criteria-table td,
+    .criteria-table th {
+        padding: 8px;
+    }
+    /* Ensure form inputs remain readable on smaller screens */
+    .feedback-table input,
+    .feedback-table select,
+    .feedback-table textarea {
+        font-size: 12px;
+    }
+    /* Allow tables to scroll horizontally if needed */
+    .form-container2 table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }
