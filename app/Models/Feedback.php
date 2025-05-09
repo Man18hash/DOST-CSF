@@ -9,7 +9,9 @@ class Feedback extends Model
 {
     use HasFactory;
 
-    // ✅ Allow mass assignment for these columns
+    // explicitly match the new table name
+    protected $table = 'feedbacks';
+
     protected $fillable = [
         'name',
         'age',
@@ -21,6 +23,7 @@ class Feedback extends Model
         'CC1',
         'CC2',
         'CC3',
+        'office_id',
         'unit_provider',
         'assistance_availed',
         'DOST_employee',
@@ -37,4 +40,3 @@ class Feedback extends Model
         'recommendation',
     ];
 }
-

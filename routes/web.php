@@ -7,57 +7,113 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\RespondentController;
 use App\Http\Controllers\FormSettingController;
 use App\Http\Controllers\YearController;
-use App\Http\Controllers\UnitEmployeeController;
+use App\Http\Controllers\OfficeController;
+use App\Http\Controllers\UnitController;
+use App\Http\Controllers\EmployeeController;
 
-
-// Public Routes
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 Route::get('/', [FeedbackController::class, 'index'])->name('home');
 Route::post('/feedback-store', [FeedbackController::class, 'store'])->name('feedback.store');
-
-Route::get('/get-employees/{unitProviderId}', [FeedbackController::class, 'getEmployeesByUnit']);
 Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.form');
 
-// Admin Authentication Routes
+Route::get('/units/by-office/{office}', [FeedbackController::class, 'getUnitsByOffice'])
+     ->name('public.units.by_office');
+Route::get('/employees/by-unit/{unit}', [FeedbackController::class, 'getEmployeesByUnit'])
+     ->name('public.employees.by_unit');
+
+/*
+|--------------------------------------------------------------------------
+| Admin Authentication
+|--------------------------------------------------------------------------
+*/
 Route::prefix('admin')->group(function () {
-    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/login', [AdminLoginController::class, 'login']);
+    Route::get('/login',  [AdminLoginController::class, 'showLoginForm'])
+         ->name('admin.login');
+    Route::post('/login', [AdminLoginController::class, 'login'])
+         ->name('admin.login.submit');
 });
 
-// Admin Panel Routes (Protected)
-Route::prefix('admin')->middleware('auth:admin')->group(function () {
-    // Dashboard
-    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
+/*
+|--------------------------------------------------------------------------
+| Admin Panel (protected)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')
+     ->middleware('auth:admin')
+     ->name('admin.')
+     ->group(function () {
 
-    // Respondents List
-    Route::get('/respondents', [RespondentController::class, 'index'])->name('admin.respondents');
-    Route::get('/respondents', [RespondentController::class, 'respondents'])->name('admin.respondents');
-    Route::get('/respondents/{id}/preview', [RespondentController::class, 'preview'])->name('admin.respondent.preview');
+    // Dashboard & Logout
+    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])
+         ->name('dashboard');
+    Route::post('/logout', [AdminLoginController::class, 'logout'])
+         ->name('logout');
 
-    // Manage Form Routes
-    Route::get('/manage_form', [FormSettingController::class, 'index'])->name('admin.manage_form');
-    Route::post('/manage_form/update', [FormSettingController::class, 'update'])->name('admin.manage_form.update');
+    // Respondents
+    Route::get('/respondents', [RespondentController::class, 'respondents'])
+         ->name('respondents');
+    Route::get('/respondents/{id}/preview', [RespondentController::class, 'preview'])
+         ->name('respondent.preview');
+    Route::get('/respondents/filter/{year}', [RespondentController::class, 'filterByYear'])
+         ->name('respondents.filter');
+    Route::get('/respondents/export/pdf/{year}', [RespondentController::class, 'exportToPDF'])
+         ->name('respondents.export.pdf');
+    Route::get('/respondents/export/csv/{year}', [RespondentController::class, 'exportCSV'])
+         ->name('respondents.export.csv');
 
-    Route::get('/admin/years', [YearController::class, 'getYears'])->name('admin.years');
+    // Form Settings
+    Route::get('/manage_form', [FormSettingController::class, 'index'])
+         ->name('manage_form');
+    Route::post('/manage_form/update', [FormSettingController::class, 'update'])
+         ->name('manage_form.update');
 
-    // Logout Route
-    Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+    // Years JSON endpoint
+    Route::get('/years', [YearController::class, 'getYears'])
+         ->name('years');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Office CRUD (modal)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/offices', [OfficeController::class, 'index'])
+         ->name('offices');                        // admin.offices
+    Route::post('/offices', [OfficeController::class, 'store'])
+         ->name('offices.store');                  // admin.offices.store
+    Route::put('/offices/{office}', [OfficeController::class, 'update'])
+         ->name('offices.update');                 // admin.offices.update
+    Route::post('/offices/{office}/toggle-status', [OfficeController::class, 'toggleStatus'])
+         ->name('offices.toggle_status');          // admin.offices.toggle_status
+
+    /*
+    |--------------------------------------------------------------------------
+    | Units CRUD (modal)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/units', [UnitController::class, 'index'])
+         ->name('units');                          // admin.units
+    Route::post('/units', [UnitController::class, 'store'])
+         ->name('units.store');                    // admin.units.store
+    Route::put('/units/{unit}', [UnitController::class, 'update'])
+         ->name('units.update');                   // admin.units.update
+    Route::post('/units/{unit}/toggle-status', [UnitController::class, 'toggleStatus'])
+         ->name('toggle_unit_status');             // admin.toggle_unit_status
+
+    /*
+    |--------------------------------------------------------------------------
+    | Employees CRUD (modal)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/employees', [EmployeeController::class, 'index'])
+         ->name('employees');                      // admin.employees
+    Route::post('/employees', [EmployeeController::class, 'store'])
+         ->name('employees.store');                // admin.employees.store
+    Route::put('/employees/{employee}', [EmployeeController::class, 'update'])
+         ->name('employees.update');               // admin.employees.update
+    Route::post('/employees/{employee}/toggle-status', [EmployeeController::class, 'toggleStatus'])
+         ->name('toggle_employee_status');         // admin.toggle_employee_status
 });
-
-Route::get('/admin/respondents/filter/{year}', [RespondentController::class, 'filterByYear'])
-    ->name('admin.respondents.filter');
-
-// Export PDF
-Route::get('/admin/respondents/export/pdf/{year}', [RespondentController::class, 'exportToPDF'])
-    ->name('admin.respondents.export.pdf');
-
-// Export CSV
-Route::get('/admin/respondents/export/csv/{year}', [RespondentController::class, 'exportCSV'])
-    ->name('admin.respondents.export.csv');
-
-Route::get('/admin/units', [UnitEmployeeController::class, 'units'])->name('admin.units');
-Route::get('/admin/employees', [UnitEmployeeController::class, 'employees'])->name('admin.employees');
-
-Route::post('/admin/units/toggle/{id}', [UnitEmployeeController::class, 'toggleUnitStatus'])->name('admin.toggle_unit_status');
-Route::post('/admin/employees/toggle/{id}', [UnitEmployeeController::class, 'toggleEmployeeStatus'])->name('admin.toggle_employee_status');
-

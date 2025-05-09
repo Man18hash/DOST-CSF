@@ -36,6 +36,7 @@
                 <a href="#" class="dropdown-btn" onclick="toggleDropdown('manageDropdownContainer')">Manage Units/Employees ▼</a>
                 <div class="dropdown-container" id="manageDropdownContainer">
                     <ul class="dropdown-content">
+                    <li><a href="{{ route('admin.offices') }}" class="{{ request()->is('admin/offices') ? 'active' : '' }}">office</a></li>
                         <li><a href="{{ route('admin.units') }}" class="{{ request()->is('admin/units') ? 'active' : '' }}">Units</a></li>
                         <li><a href="{{ route('admin.employees') }}" class="{{ request()->is('admin/employees') ? 'active' : '' }}">Employees</a></li>
                     </ul>

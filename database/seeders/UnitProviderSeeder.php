@@ -3,23 +3,34 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Office;
 use App\Models\UnitProvider;
 
 class UnitProviderSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        $unitProviders = [
-            'ORD', 'FASS', 'TOS',
-            'PSTO Batanes', 'PSTO Cagayan',
-            'PSTO Isabela', 'PSTO Quirino', 'PSTO Nueva Vizcaya'
+        $officeUnits = [
+            'ORD' => ['ORD', 'PSTO Batanes', 'PSTO Cagayan', 'PSTO Isabela', 'PSTO Nueva Vizcaya', 'PSTO Quirino', 'Records Management Unit', 'GIA', 'MIS'],
+            'FASS' => ['FASS', 'ABC', 'Purchasing', 'Scholarship', 'Human Resource', 'Maintenance'],
+            'TOS'  => ['TOS', 'Redim', 'SETUP', 'S&T Information and Promotion', 'CEST', 'Startbook', 'DRRM', 'GAD', 'RML', 'RSTL'],
+            'FOS'  => ['SETUP RPMO', 'Packaging and labelling'],
         ];
 
-        foreach ($unitProviders as $unit) {
-            UnitProvider::firstOrCreate(
-                ['unit_name' => $unit],
-                ['status' => 'Active'] // Ensuring a default status
-            );
+        foreach ($officeUnits as $officeName => $units) {
+            $office = Office::where('name', $officeName)->first();
+
+            if (!$office) {
+                echo "❌ Office '{$officeName}' not found. Skipping units...\n";
+                continue;
+            }
+
+            foreach ($units as $unitName) {
+                UnitProvider::firstOrCreate(
+                    ['unit_name' => $unitName],
+                    ['office_id' => $office->id, 'status' => 'Active']
+                );
+            }
         }
 
         echo "✅ Unit Providers Seeded Successfully!\n";

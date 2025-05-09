@@ -8,12 +8,10 @@ use App\Models\DOSTEmployee;
 
 class DOSTEmployeeSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        // Fetch all Unit Providers by name and their corresponding IDs
-        $units = UnitProvider::all()->pluck('id', 'unit_name');
+        $units = UnitProvider::pluck('id', 'unit_name')->all();
 
-        // List of Employees and their respective Unit Provider names
         $employees = [
             // ORD Employees
             ['name' => 'Virginia G. Bilgera', 'employee_id' => 'VGB-0111-055', 'unit_provider' => 'ORD'],
@@ -27,49 +25,49 @@ class DOSTEmployeeSeeder extends Seeder
 
             // FASS Employees
             ['name' => 'Mary Ann P. Maglasin', 'employee_id' => 'MPM-0625-010', 'unit_provider' => 'FASS'],
-            ['name' => 'Nancy C. Guimmayen', 'employee_id' => 'NCG-1206-012', 'unit_provider' => 'FASS'],
-            ['name' => 'Claudence Joyce V. Batang', 'employee_id' => 'CVB-0102-015', 'unit_provider' => 'FASS'],
-            ['name' => 'Micah M. Taguba', 'employee_id' => 'MMT-0505-164', 'unit_provider' => 'FASS'],
-            ['name' => 'Junivie M. Langcay', 'employee_id' => 'JML-0125-050', 'unit_provider' => 'FASS'],
-            ['name' => 'Rolex B. Tolentino', 'employee_id' => 'RBT-0610-145', 'unit_provider' => 'FASS'],
-            ['name' => 'Nelson P. Olea', 'employee_id' => 'NPO-1115-003', 'unit_provider' => 'FASS'],
-            ['name' => 'Cecilia S. Calagui', 'employee_id' => 'CSC-1222-024', 'unit_provider' => 'FASS'],
-            ['name' => 'Angelica G. Tuddao', 'employee_id' => 'AGT-1022-247', 'unit_provider' => 'FASS'],
-            ['name' => 'Madelyn P. Bulaqui', 'employee_id' => 'MPB-1212-160', 'unit_provider' => 'FASS'],
-            ['name' => 'Luzviminda B. Bucayu', 'employee_id' => 'LBB-0314-014', 'unit_provider' => 'FASS'],
-            ['name' => 'Ma. Angelica C. Adduru', 'employee_id' => 'MCA-0903-110', 'unit_provider' => 'FASS'],
-            ['name' => 'Rico A. Adduru', 'employee_id' => 'RBA-0615-029', 'unit_provider' => 'FASS'],
-            ['name' => 'Ramil M. Tangan', 'employee_id' => 'RMT-0506-129', 'unit_provider' => 'FASS'],
-            ['name' => 'Ronald C. Fabroa', 'employee_id' => 'RCG-1116-258', 'unit_provider' => 'FASS'],
-            ['name' => 'Cherielyn A. Gregorio', 'employee_id' => 'CAG-1027-257', 'unit_provider' => 'FASS'],
-            ['name' => 'Kris Andrew P. Evanculla', 'employee_id' => 'KPE-0910-253', 'unit_provider' => 'FASS'],
+            ['name' => 'Nancy C. Guimmayen', 'employee_id' => 'NCG-1206-012', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Claudence Joyce V. Batang', 'employee_id' => 'CVB-0102-015', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Micah M. Taguba', 'employee_id' => 'MMT-0505-164', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Junivie M. Langcay', 'employee_id' => 'JML-0125-050', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Rolex B. Tolentino', 'employee_id' => 'RBT-0610-145', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Nelson P. Olea', 'employee_id' => 'NPO-1115-003', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Cecilia S. Calagui', 'employee_id' => 'CSC-1222-024', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Angelica G. Tuddao', 'employee_id' => 'AGT-1022-247', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Madelyn P. Bulaqui', 'employee_id' => 'MPB-1212-160', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Luzviminda B. Bucayu', 'employee_id' => 'LBB-0314-014', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Ma. Angelica C. Adduru', 'employee_id' => 'MCA-0903-110', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Rico A. Adduru', 'employee_id' => 'RBA-0615-029', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Ramil M. Tangan', 'employee_id' => 'RMT-0506-129', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Ronald C. Fabroa', 'employee_id' => 'RCG-1116-258', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Cherielyn A. Gregorio', 'employee_id' => 'CAG-1027-257', 'unit_provider' => 'Scholarship'],
+            ['name' => 'Kris Andrew P. Evanculla', 'employee_id' => 'KPE-0910-253', 'unit_provider' => 'Scholarship'],
 
             // TOS Employees
             ['name' => 'Laila A. Taguinod', 'employee_id' => 'LAT-0303-248', 'unit_provider' => 'TOS'],
-            ['name' => 'Mary Ann D. Carpiso', 'employee_id' => 'MDC-0517-246', 'unit_provider' => 'TOS'],
-            ['name' => 'Aileen C. Gonzales', 'employee_id' => 'ACG-0721-033', 'unit_provider' => 'TOS'],
-            ['name' => 'Rowena A. Guzman', 'employee_id' => 'RAG-1207-017', 'unit_provider' => 'TOS'],
-            ['name' => 'Jude Michael C. Magora', 'employee_id' => 'JCM-0429-189', 'unit_provider' => 'TOS'],
-            ['name' => 'Duane M. Carodan', 'employee_id' => 'DMC-0722-217', 'unit_provider' => 'TOS'],
-            ['name' => 'Jeremiah J. Orpilla', 'employee_id' => 'JJO-0105-250', 'unit_provider' => 'TOS'],
-            ['name' => 'Joy C. Albino', 'employee_id' => 'JCA-0128-218', 'unit_provider' => 'TOS'],
-            ['name' => 'Jeffson B. Carbonell', 'employee_id' => 'JBC-0825-243', 'unit_provider' => 'TOS'],
-            ['name' => 'Carl Joshua D. Reyes', 'employee_id' => 'CDR-1105-236', 'unit_provider' => 'TOS'],
-            ['name' => 'Angelo Caranguian', 'employee_id' => 'AC-0408-233', 'unit_provider' => 'TOS'],
-            ['name' => 'Ferdinand Michael B. Magusib', 'employee_id' => 'FBM-1227-007', 'unit_provider' => 'TOS'],
-            ['name' => 'Jamaica Beverly G. Calagui', 'employee_id' => 'JGC-0106-178', 'unit_provider' => 'TOS'],
-            ['name' => 'Jhon David A. Villanueva', 'employee_id' => 'JAV-0319-225', 'unit_provider' => 'TOS'],
-            ['name' => 'Samantha H. Baliza', 'employee_id' => 'SHB-0102-227', 'unit_provider' => 'TOS'],
-            ['name' => 'Glydel G. Pascua', 'employee_id' => 'GGP-0108-192', 'unit_provider' => 'TOS'],
-            ['name' => 'Neil P. Dela Cruz', 'employee_id' => 'NPD-0912-214', 'unit_provider' => 'TOS'],
-            ['name' => 'Amazing Grace U. De La Cruz', 'employee_id' => 'AUD-0120-223', 'unit_provider' => 'TOS'],
-            ['name' => 'Alijah Samuel V. Mabborang', 'employee_id' => 'AVM-0122-237', 'unit_provider' => 'TOS'],
-            ['name' => 'Marlon M. Arao', 'employee_id' => 'MMA-0809-136', 'unit_provider' => 'TOS'],
-            ['name' => 'Jhon Joe T. Garcia', 'employee_id' => 'JTG-0115-256', 'unit_provider' => 'TOS'],
-            ['name' => 'Niko S. Tabangin', 'employee_id' => 'NST-0721-221', 'unit_provider' => 'TOS'],
-            ['name' => 'Rodora B. Santos', 'employee_id' => 'RBS-1216-206', 'unit_provider' => 'TOS'],
-            ['name' => 'Jenny-Rose G. Masocol', 'employee_id' => 'JGM-0812-196', 'unit_provider' => 'TOS'],
-            ['name' => 'Aileen C. Gonzales', 'employee_id' => 'ACG-0721-033', 'unit_provider' => 'TOS'],
+            ['name' => 'Mary Ann D. Carpiso', 'employee_id' => 'MDC-0517-246', 'unit_provider' => 'SETUP'],
+            ['name' => 'Aileen C. Gonzales', 'employee_id' => 'ACG-0721-033', 'unit_provider' => 'SETUP'],
+            ['name' => 'Rowena A. Guzman', 'employee_id' => 'RAG-1207-017', 'unit_provider' => 'SETUP'],
+            ['name' => 'Jude Michael C. Magora', 'employee_id' => 'JCM-0429-189', 'unit_provider' => 'SETUP'],
+            ['name' => 'Duane M. Carodan', 'employee_id' => 'DMC-0722-217', 'unit_provider' => 'SETUP'],
+            ['name' => 'Jeremiah J. Orpilla', 'employee_id' => 'JJO-0105-250', 'unit_provider' => 'SETUP'],
+            ['name' => 'Joy C. Albino', 'employee_id' => 'JCA-0128-218', 'unit_provider' => 'S&T Information and Promotion'],
+            ['name' => 'Jeffson B. Carbonell', 'employee_id' => 'JBC-0825-243', 'unit_provider' => 'S&T Information and Promotion'],
+            ['name' => 'Carl Joshua D. Reyes', 'employee_id' => 'CDR-1105-236', 'unit_provider' => 'Startbook'],
+            ['name' => 'Angelo Caranguian', 'employee_id' => 'AC-0408-233', 'unit_provider' => 'S&T Information and Promotion'],
+            ['name' => 'Ferdinand Michael B. Magusib', 'employee_id' => 'FBM-1227-007', 'unit_provider' => 'RML'],
+            ['name' => 'Jamaica Beverly G. Calagui', 'employee_id' => 'JGC-0106-178', 'unit_provider' => 'RSTL'],
+            ['name' => 'Jhon David A. Villanueva', 'employee_id' => 'JAV-0319-225', 'unit_provider' => 'RML'],
+            ['name' => 'Samantha H. Baliza', 'employee_id' => 'SHB-0102-227', 'unit_provider' => 'RSTL'],
+            ['name' => 'Glydel G. Pascua', 'employee_id' => 'GGP-0108-192', 'unit_provider' => 'RSTL'],
+            ['name' => 'Neil P. Dela Cruz', 'employee_id' => 'NPD-0912-214', 'unit_provider' => 'RSTL'],
+            ['name' => 'Amazing Grace U. De La Cruz', 'employee_id' => 'AUD-0120-223', 'unit_provider' => 'RML'],
+            ['name' => 'Alijah Samuel V. Mabborang', 'employee_id' => 'AVM-0122-237', 'unit_provider' => 'RSTL'],
+            ['name' => 'Marlon M. Arao', 'employee_id' => 'MMA-0809-136', 'unit_provider' => 'RSTL'],
+            ['name' => 'Jhon Joe T. Garcia', 'employee_id' => 'JTG-0115-256', 'unit_provider' => 'RML'],
+            ['name' => 'Niko S. Tabangin', 'employee_id' => 'NST-0721-221', 'unit_provider' => 'S&T Information and Promotion'],
+            ['name' => 'Rodora B. Santos', 'employee_id' => 'RBS-1216-206', 'unit_provider' => 'S&T Information and Promotion'],
+            ['name' => 'Jenny-Rose G. Masocol', 'employee_id' => 'JGM-0812-196', 'unit_provider' => 'S&T Information and Promotion'],
+            ['name' => 'Aileen C. Gonzales', 'employee_id' => 'ACG-0721-033', 'unit_provider' => 'SETUP'],
 
             // PSTO Batanes Employees
             ['name' => 'Nora T. Garcia', 'employee_id' => 'NTG-1127-200', 'unit_provider' => 'PSTO Batanes'],
@@ -119,24 +117,22 @@ class DOSTEmployeeSeeder extends Seeder
             ['name' => 'Clarenet J. Balderas', 'employee_id' => 'CJB-0825-126', 'unit_provider' => 'PSTO Nueva Vizcaya'],
             ['name' => 'Lhea Lee C. Galap', 'employee_id' => 'LCG-0404-177', 'unit_provider' => 'PSTO Nueva Vizcaya'],
             ['name' => 'Dominique P. Medina', 'employee_id' => 'DPM-1014-252', 'unit_provider' => 'PSTO Nueva Vizcaya'],
-
         ];
 
-        // Insert Employees into the Database
         foreach ($employees as $employee) {
-            // Ensure the UnitProvider exists before inserting the employee
-            if (!isset($units[$employee['unit_provider']])) {
-                echo "⚠️ Warning: Unit Provider '{$employee['unit_provider']}' not found. Skipping {$employee['name']}.\n";
+            $unitId = $units[$employee['unit_provider']] ?? null;
+
+            if (!$unitId) {
+                echo "❌ Unit '{$employee['unit_provider']}' not found. Skipping {$employee['name']}.\n";
                 continue;
             }
 
-            // Insert employee with a valid unit_provider_id
             DOSTEmployee::updateOrCreate(
-                ['employee_id' => $employee['employee_id']], // Ensure uniqueness
+                ['employee_id' => $employee['employee_id']],
                 [
                     'name' => $employee['name'],
-                    'unit_provider_id' => $units[$employee['unit_provider']],
-                    'status' => 'Active' // Default status for all employees
+                    'unit_provider_id' => $unitId,
+                    'status' => 'Active',
                 ]
             );
         }

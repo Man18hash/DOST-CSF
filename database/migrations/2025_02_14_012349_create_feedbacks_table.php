@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback', function (Blueprint $table) {
+        Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
             $table->integer('age');
             $table->enum('sex', ['Male', 'Female']);
             $table->string('address');
-            $table->json('client_classification'); // Stores multiple selections
+            $table->json('client_classification'); // still JSON, though it will now contain a single string
             $table->enum('client_type', ['Internal', 'External']);
             $table->date('date');
             $table->string('CC1');
             $table->string('CC2')->nullable();
             $table->string('CC3')->nullable();
+            $table->unsignedBigInteger('office_id');
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
             $table->string('unit_provider');
             $table->string('assistance_availed');
             $table->string('DOST_employee')->nullable();
@@ -36,7 +38,7 @@ return new class extends Migration
             $table->string('SQD7');
             $table->string('SQD8');
             $table->text('suggestions')->nullable();
-            $table->integer('recommendation'); // Rating scale from 1-10
+            $table->integer('recommendation');
             $table->timestamps();
         });
     }
@@ -46,6 +48,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('feedbacks');
     }
 };

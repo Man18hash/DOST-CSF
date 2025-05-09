@@ -3,224 +3,206 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Feedback; // Import the Feedback model
+use App\Models\Feedback;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Response;
 
-
 class RespondentController extends Controller
 {
-    // Display the list of respondents
+    /**
+     * Show all respondents (unfiltered).
+     */
     public function index()
     {
-        $respondents = Feedback::all(); // Fetch all respondents
-        return view('admin.respondents', compact('respondents'));
+        $respondents = Feedback::all();
+        $ages        = Feedback::distinct()->pluck('age')->sort();
+
+        return view('admin.respondents', compact('respondents', 'ages'));
     }
 
+    /**
+     * Show respondents filtered by sort options (Client Type / Classification).
+     */
     public function respondents(Request $request)
     {
-        $sort = $request->input('sort');
-
+        $sort  = $request->input('sort');
         $query = Feedback::query();
 
         if ($sort) {
             $parts = explode(': ', $sort);
-            if (count($parts) == 2) {
-                $field = strtolower($parts[0]);
-                $value = $parts[1];
+            if (count($parts) === 2) {
+                [$field, $value] = $parts;
+                $field = strtolower($field);
 
-                switch ($field) {
-                    case 'client type':
-                        $query->where('client_type', $value);
-                        break;
-                    case 'client classification':
-                        $query->whereJsonContains('client_classification', $value);
-                        break;
+                if ($field === 'client type') {
+                    $query->where('client_type', $value);
+                } elseif ($field === 'client classification') {
+                    $query->whereJsonContains('client_classification', $value);
                 }
             }
         }
 
-        $clientTypes = ['Internal', 'External'];
-        $clientClassifications = ['General Public', 'Business', 'Government', 'Student'];
-
+        $respondents    = $query->get();
+        $ages           = Feedback::distinct()->pluck('age')->sort();
+        $clientTypes    = ['Internal', 'External'];
+        $clientClasses  = ['General Public', 'Business', 'Government', 'Student'];
         $sortingOptions = [];
 
         foreach ($clientTypes as $type) {
             $sortingOptions[] = "Client Type: $type";
         }
-
-        // Add separator for visual distinction
-        $sortingOptions[] = "---"; // Separator
-
-        foreach ($clientClassifications as $classification) {
+        $sortingOptions[] = '---';
+        foreach ($clientClasses as $classification) {
             $sortingOptions[] = "Client Classification: $classification";
         }
 
-        $respondents = $query->get();
-
-        return view('admin.respondents', compact('respondents', 'sortingOptions', 'sort'));
+        return view('admin.respondents', compact(
+            'respondents',
+            'sortingOptions',
+            'sort',
+            'ages'
+        ));
     }
 
-    // Fetch a specific respondent's feedback for the modal preview
+    /**
+     * Return JSON for a single respondent (modal preview).
+     */
     public function preview($id)
     {
         $respondent = Feedback::findOrFail($id);
-
-        // Ensure client classification is properly decoded
         $respondent->client_classification = json_decode($respondent->client_classification, true);
 
         return response()->json([
-            'id' => $respondent->id,
-            'name' => $respondent->name,
-            'age' => $respondent->age,
-            'sex' => $respondent->sex,
-            'address' => $respondent->address,
+            'id'                    => $respondent->id,
+            'name'                  => $respondent->name,
+            'age'                   => $respondent->age,
+            'sex'                   => $respondent->sex,
+            'address'               => $respondent->address,
             'client_classification' => $respondent->client_classification,
-            'client_type' => $respondent->client_type,
-            'date' => $respondent->date,
-            // **Include missing fields**
-            'CC1' => $respondent->CC1,
-            'CC2' => $respondent->CC2,
-            'CC3' => $respondent->CC3,
-            'unit_provider' => $respondent->unit_provider,
-            'assistance_availed' => $respondent->assistance_availed,
-            'DOST_employee' => $respondent->DOST_employee,
-            'SQD0' => $respondent->SQD0,
-            'SQD1' => $respondent->SQD1,
-            'SQD2' => $respondent->SQD2,
-            'SQD3' => $respondent->SQD3,
-            'SQD4' => $respondent->SQD4,
-            'SQD5' => $respondent->SQD5,
-            'SQD6' => $respondent->SQD6,
-            'SQD7' => $respondent->SQD7,
-            'SQD8' => $respondent->SQD8,
-            'suggestions' => $respondent->suggestions,
-            'recommendation' => $respondent->recommendation,
+            'client_type'           => $respondent->client_type,
+            'date'                  => $respondent->date,
+            'CC1'                   => $respondent->CC1,
+            'CC2'                   => $respondent->CC2,
+            'CC3'                   => $respondent->CC3,
+            'unit_provider'         => $respondent->unit_provider,
+            'assistance_availed'    => $respondent->assistance_availed,
+            'DOST_employee'         => $respondent->DOST_employee,
+            'SQD0'                  => $respondent->SQD0,
+            'SQD1'                  => $respondent->SQD1,
+            'SQD2'                  => $respondent->SQD2,
+            'SQD3'                  => $respondent->SQD3,
+            'SQD4'                  => $respondent->SQD4,
+            'SQD5'                  => $respondent->SQD5,
+            'SQD6'                  => $respondent->SQD6,
+            'SQD7'                  => $respondent->SQD7,
+            'SQD8'                  => $respondent->SQD8,
+            'suggestions'           => $respondent->suggestions,
+            'recommendation'        => $respondent->recommendation,
         ]);
     }
 
+    /**
+     * Filter respondents by year (and optional month, age, gender).
+     */
     public function filterByYear($year, Request $request)
     {
-        $quarter = $request->input('quarter');
-        $age = $request->input('age');
+        $month  = $request->input('month');
+        $age    = $request->input('age');
         $gender = $request->input('gender');
 
-        // Start with a base query filtering by the year
         $query = Feedback::whereYear('date', $year);
 
-        // Apply quarter filtering if selected
-        if ($quarter) {
-            if ($quarter == 1) {
-                $query->whereMonth('date', '>=', 1)->whereMonth('date', '<=', 3);
-            } elseif ($quarter == 2) {
-                $query->whereMonth('date', '>=', 4)->whereMonth('date', '<=', 6);
-            } elseif ($quarter == 3) {
-                $query->whereMonth('date', '>=', 7)->whereMonth('date', '<=', 9);
-            } elseif ($quarter == 4) {
-                $query->whereMonth('date', '>=', 10)->whereMonth('date', '<=', 12);
-            }
+        if ($month) {
+            $query->whereMonth('date', $month);
         }
-
-        // 🔥 Apply Age and Gender Filtering
         if ($age) {
             $query->where('age', $age);
         }
-
         if ($gender) {
             $query->where('sex', $gender);
         }
 
-        // Get the filtered respondents
         $respondents = $query->get();
+        $years       = Feedback::selectRaw('YEAR(date) as year')
+                        ->distinct()
+                        ->orderBy('year', 'desc')
+                        ->pluck('year');
+        $ages        = Feedback::whereYear('date', $year)
+                        ->distinct()
+                        ->pluck('age')
+                        ->sort();
 
-        // Get unique years for the dropdown
-        $years = Feedback::selectRaw('YEAR(date) as year')->distinct()->orderBy('year', 'desc')->pluck('year');
-
-        // Get unique ages for filtering
-        $ages = Feedback::whereYear('date', $year)->distinct()->pluck('age')->sort();
-
-        return view('admin.respondents_year', compact('respondents', 'years', 'year', 'quarter', 'ages'));
+        return view('admin.respondents_year', compact(
+            'respondents',
+            'years',
+            'year',
+            'month',
+            'ages'
+        ));
     }
 
-
+    /**
+     * Export to PDF.
+     */
     public function exportToPDF($year, Request $request)
     {
-        $quarter = $request->input('quarter'); // Get selected quarter
+        $month   = $request->input('month');
+        $byMonth = [];
 
-        // Define quarter-month mapping
-        $quarters = [
-            '1' => ['Q1 (January - March)', [1, 2, 3]],
-            '2' => ['Q2 (April - June)', [4, 5, 6]],
-            '3' => ['Q3 (July - September)', [7, 8, 9]],
-            '4' => ['Q4 (October - December)', [10, 11, 12]]
-        ];
-
-        $respondentsByQuarter = [];
-
-        if ($quarter && isset($quarters[$quarter])) {
-            // If a quarter is selected, fetch only that quarter's data
-            $title = $quarters[$quarter][0];
-            $respondentsByQuarter[$title] = Feedback::whereYear('date', $year)
-                ->whereIn(\DB::raw('MONTH(date)'), $quarters[$quarter][1])
-                ->get();
+        if ($month) {
+            $name                = date("F", mktime(0, 0, 0, $month, 10));
+            $byMonth[$name]      = Feedback::whereYear('date', $year)
+                                        ->whereMonth('date', $month)
+                                        ->get();
         } else {
-            // If no quarter is selected, fetch all records within the year
-            foreach ($quarters as $key => [$title, $months]) {
-                $respondentsByQuarter[$title] = Feedback::whereYear('date', $year)
-                    ->whereIn(\DB::raw('MONTH(date)'), $months)
-                    ->get();
+            for ($m = 1; $m <= 12; $m++) {
+                $name             = date("F", mktime(0, 0, 0, $m, 10));
+                $byMonth[$name]   = Feedback::whereYear('date', $year)
+                                        ->whereMonth('date', $m)
+                                        ->get();
             }
         }
 
-        // Prevent exporting empty PDFs
-        if (empty(array_filter($respondentsByQuarter))) {
+        if (empty(array_filter($byMonth))) {
             return back()->with('error', 'No respondents found for the selected filters.');
         }
 
-        // Load the PDF view with the filtered data
-        $pdf = Pdf::loadView('exports.respondents_pdf', compact('respondentsByQuarter', 'year', 'quarter'));
-
-        return $pdf->download("respondents_{$year}_quarter_{$quarter}.pdf");
+        $pdf  = Pdf::loadView('exports.respondents_pdf', compact('byMonth', 'year', 'month'));
+        $name = "respondents_{$year}" . ($month ? "_". date("F", mktime(0,0,0,$month,10)) : '') . ".pdf";
+        return $pdf->download($name);
     }
 
-
+    /**
+     * Export to CSV.
+     */
     public function exportCSV($year, Request $request)
     {
-        $quarter = $request->input('quarter');
-
-        // Define quarter-month mapping
-        $quarters = [
-            '1' => [1, 2, 3],
-            '2' => [4, 5, 6],
-            '3' => [7, 8, 9],
-            '4' => [10, 11, 12]
-        ];
-
-        $query = Feedback::whereYear('date', $year);
-
-        if ($quarter && isset($quarters[$quarter])) {
-            $query->whereIn(\DB::raw('MONTH(date)'), $quarters[$quarter]);
+        $month      = $request->input('month');
+        $query      = Feedback::whereYear('date', $year);
+        if ($month) {
+            $query->whereMonth('date', $month);
         }
-
         $respondents = $query->get();
 
-        $filename = "Respondents_{$year}_quarter_{$quarter}.csv";
-        $handle = fopen($filename, 'w');
-        fputcsv($handle, ['Name', 'Age', 'Gender', 'Unit Provider', 'Service Availed', 'DOST Employee']);
+        $filename = "Respondents_{$year}" . ($month ? "_". date("F", mktime(0,0,0,$month,10)) : '') . ".csv";
+        $handle   = fopen($filename, 'w');
 
-        foreach ($respondents as $respondent) {
+        fputcsv($handle, [
+            'Name','Age','Gender','Unit Provider','Service Availed','DOST Employee'
+        ]);
+
+        foreach ($respondents as $r) {
             fputcsv($handle, [
-                $respondent->name,
-                $respondent->sex,
-                $respondent->unit_provider,
-                $respondent->assistance_availed,
-                $respondent->DOST_employee
+                $r->name,
+                $r->age,
+                $r->sex,
+                $r->unit_provider,
+                $r->assistance_availed,
+                $r->DOST_employee,
             ]);
         }
 
         fclose($handle);
-
         return response()->download($filename)->deleteFileAfterSend(true);
     }
-
 }

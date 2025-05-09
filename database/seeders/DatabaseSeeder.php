@@ -9,6 +9,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Seed default user
         User::firstOrCreate(
             ['email' => 'test@example.com'], // Ensures uniqueness
             [
@@ -16,6 +17,13 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('password'), // Ensure password is hashed
             ]
         );
+
+        // Call additional seeders
+        $this->call([
+            AdminSeeder::class,
+            OfficeSeeder::class,
+            UnitProviderSeeder::class,
+            DOSTEmployeeSeeder::class,
+        ]);
     }
 }
-

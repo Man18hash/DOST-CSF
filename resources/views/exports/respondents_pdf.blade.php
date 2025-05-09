@@ -15,8 +15,12 @@
             <h1>DEPARTMENT OF SCIENCE AND TECHNOLOGY</h1>
             <h2>Regional Office No. 02</h2>
             <p class="sub-header">SUMMARY OF CUSTOMER SATISFACTION FEEDBACK</p>
-            <p class="quarter-title">
-                {{ $quarter ? 'QUARTER ' . $quarter : 'FULL YEAR' }} {{ $year }}
+            <p class="month-title">
+                @if($month)
+                    {{ date("F", mktime(0, 0, 0, $month, 10)) }} {{ $year }}
+                @else
+                    FULL YEAR {{ $year }}
+                @endif
             </p>
         </div>
     </div>
@@ -24,11 +28,11 @@
     <!-- HEADER LINE -->
     <div class="header-line"></div>
 
-    @if(isset($respondentsByQuarter) && count($respondentsByQuarter) > 0)
-        @foreach($respondentsByQuarter as $quarterTitle => $respondents)
-            <h3 class="quarter-title">{{ $quarterTitle }}</h3>
+    @if(isset($respondentsByMonth) && count($respondentsByMonth) > 0)
+        @foreach($respondentsByMonth as $monthName => $respondents)
+            <h3 class="month-title">{{ $monthName }}</h3>
 
-            @if(isset($respondents) && !$respondents->isEmpty())
+            @if(!$respondents->isEmpty())
                 <div class="table-container">
                     <table>
                         <thead>
@@ -72,7 +76,7 @@
                     </table>
                 </div>
             @else
-                <p class="no-data">No respondents for this quarter.</p>
+                <p class="no-data">No respondents for this month.</p>
             @endif
             <hr>
         @endforeach
